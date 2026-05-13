@@ -13,6 +13,7 @@ const geist = Geist({
 export const metadata: Metadata = {
   title: "CRM Avancia",
   description: "Panel de gestión comercial — Avancia Tech",
+  icons: { icon: "/logo.png", apple: "/logo.png" },
 };
 
 export default function RootLayout({

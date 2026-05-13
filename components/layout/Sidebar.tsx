@@ -3,12 +3,12 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 import {
   LayoutDashboard,
   CalendarDays,
   Users,
   Search,
-  Zap,
   Menu,
   X,
 } from "lucide-react";
@@ -82,9 +82,13 @@ export function Sidebar() {
         {/* Logo */}
         <div className="flex items-center justify-between px-5 py-5 border-b border-slate-100">
           <div className="flex items-center gap-2.5">
-            <div className="h-7 w-7 rounded-lg bg-indigo-600 flex items-center justify-center shadow-sm">
-              <Zap className="h-4 w-4 text-white" strokeWidth={2.5} />
-            </div>
+            <Image
+              src="/logo.png"
+              alt="Avancia CRM"
+              width={32}
+              height={32}
+              className="rounded-lg shrink-0"
+            />
             <div>
               <span className="text-sm font-bold text-slate-900 tracking-tight">Avancia</span>
               <p className="text-[10px] text-slate-400 leading-none mt-0.5">CRM</p>
