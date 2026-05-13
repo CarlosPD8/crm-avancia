@@ -44,8 +44,28 @@ model Lead {
   source      LeadSource @default(MANUAL)
   status      LeadStatus @default(NEW)
   notes       String?
+  proposals   Proposal[]
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
+}
+
+model Proposal {
+  id          String         @id @default(cuid())
+  companyName String
+  contactName String
+  email       String
+  phone       String?
+  leadId      String?
+  lead        Lead?          @relation(fields: [leadId], references: [id])
+  status      ProposalStatus @default(DRAFT)
+  value       Float?
+  notes       String?
+  pdfPath     String?
+  pdfName     String?
+  pdfSize     Int?
+  sentAt      DateTime?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
 }
 
 model ProspectSearch {
@@ -88,4 +108,12 @@ enum LeadSource {
   REFERRAL
   WEBSITE
   OTHER
+}
+
+enum ProposalStatus {
+  DRAFT
+  SENT
+  NEGOTIATING
+  ACCEPTED
+  REJECTED
 }

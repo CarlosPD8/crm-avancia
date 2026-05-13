@@ -7,6 +7,7 @@ const pageTitles: Record<string, { title: string; description: string }> = {
   "/appointments":    { title: "Citas",            description: "Gestiona tus citas comerciales" },
   "/leads":           { title: "Leads",            description: "Contactos y oportunidades" },
   "/prospect-search": { title: "Buscar Clientes",  description: "Encuentra nuevos clientes potenciales" },
+  "/proposals":       { title: "Propuestas",       description: "Dossieres y propuestas comerciales" },
 };
 
 function getPageInfo(pathname: string) {
