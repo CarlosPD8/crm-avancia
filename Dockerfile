@@ -20,7 +20,8 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 RUN apk add --no-cache openssl && \
-    addgroup -S nodejs && adduser -S nextjs -G nodejs
+    addgroup -S nodejs && adduser -S nextjs -G nodejs && \
+    mkdir -p /app/uploads && chown nextjs:nodejs /app/uploads
 
 COPY --from=builder /app/public ./public
 
