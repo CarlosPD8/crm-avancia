@@ -1,10 +1,9 @@
 "use client";
 
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FileText, ExternalLink } from "lucide-react";
 import { DataTable, type Column } from "@/components/ui/DataTable";
 import { ProposalStatusBadge } from "./ProposalStatusBadge";
-import { Button } from "@/components/ui/Button";
 import { DeleteProposalButton } from "@/app/proposals/DeleteProposalButton";
 import { formatCreatedAt } from "@/lib/utils";
 import type { ProposalStatus } from "@prisma/client";
@@ -67,6 +66,7 @@ const columns: Column<SerializedProposal>[] = [
           target="_blank"
           rel="noopener noreferrer"
           onClick={(e) => e.stopPropagation()}
+          onDoubleClick={(e) => e.stopPropagation()}
           className="inline-flex items-center gap-1.5 text-xs font-medium transition-opacity hover:opacity-70"
           style={{ color: "var(--accent)" }}
         >
@@ -98,20 +98,15 @@ const columns: Column<SerializedProposal>[] = [
 ];
 
 export function ProposalsTable({ proposals }: { proposals: SerializedProposal[] }) {
+  const router = useRouter();
   return (
     <DataTable<SerializedProposal>
       columns={columns}
       data={proposals}
       emptyTitle="Sin propuestas"
       emptyDescription="Crea tu primera propuesta para empezar."
-      actions={(row) => (
-        <>
-          <Link href={`/proposals/${row.id}`}>
-            <Button size="sm" variant="ghost">Editar</Button>
-          </Link>
-          <DeleteProposalButton id={row.id} />
-        </>
-      )}
+      onRowDoubleClick={(row) => router.push(`/proposals/${row.id}`)}
+      actions={(row) => <DeleteProposalButton id={row.id} />}
     />
   );
 }

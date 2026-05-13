@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { CalendarDays } from "lucide-react";
 import { DataTable, type Column } from "@/components/ui/DataTable";
 import { StatusBadge } from "@/components/ui/StatusBadge";
@@ -25,10 +25,6 @@ export type SerializedAppointment = {
   assignedUser: { id: string; name: string } | null;
 };
 
-interface AppointmentsTableProps {
-  appointments: SerializedAppointment[];
-}
-
 const columns: Column<SerializedAppointment>[] = [
   {
     key: "companyName",
@@ -36,9 +32,7 @@ const columns: Column<SerializedAppointment>[] = [
     sortable: true,
     render: (_, row) => (
       <div className="flex items-center gap-2.5">
-        <div
-          className="h-7 w-7 rounded-lg flex items-center justify-center shrink-0 theme-avatar-accent"
-        >
+        <div className="h-7 w-7 rounded-lg flex items-center justify-center shrink-0 theme-avatar-accent">
           <span className="text-xs font-semibold">{row.companyName.charAt(0)}</span>
         </div>
         <div>
@@ -85,7 +79,8 @@ const columns: Column<SerializedAppointment>[] = [
   },
 ];
 
-export function AppointmentsTable({ appointments }: AppointmentsTableProps) {
+export function AppointmentsTable({ appointments }: { appointments: SerializedAppointment[] }) {
+  const router = useRouter();
   return (
     <DataTable<SerializedAppointment>
       columns={columns}
@@ -93,14 +88,8 @@ export function AppointmentsTable({ appointments }: AppointmentsTableProps) {
       emptyIcon={CalendarDays}
       emptyTitle="Sin citas"
       emptyDescription="Crea tu primera cita para empezar."
-      actions={(row) => (
-        <>
-          <Link href={`/appointments/${row.id}`}>
-            <Button size="sm" variant="ghost">Editar</Button>
-          </Link>
-          <DeleteAppointmentButton id={row.id} />
-        </>
-      )}
+      onRowDoubleClick={(row) => router.push(`/appointments/${row.id}`)}
+      actions={(row) => <DeleteAppointmentButton id={row.id} />}
     />
   );
 }

@@ -25,6 +25,7 @@ interface DataTableProps<T> {
   emptyDescription?: string;
   actions?: (row: T) => React.ReactNode;
   onRowClick?: (row: T) => void;
+  onRowDoubleClick?: (row: T) => void;
   keyField?: string;
   className?: string;
 }
@@ -34,7 +35,7 @@ type SortDir = "asc" | "desc";
 export function DataTable<T>({
   columns, data, isLoading,
   emptyIcon, emptyTitle = "Sin resultados", emptyDescription,
-  actions, onRowClick, keyField = "id", className,
+  actions, onRowClick, onRowDoubleClick, keyField = "id", className,
 }: DataTableProps<T>) {
   const [sortKey, setSortKey] = useState<string | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>("asc");
@@ -54,6 +55,8 @@ export function DataTable<T>({
     const cmp = av < bv ? -1 : av > bv ? 1 : 0;
     return sortDir === "asc" ? cmp : -cmp;
   });
+
+  const isInteractive = !!(onRowClick || onRowDoubleClick);
 
   return (
     <div
@@ -112,7 +115,8 @@ export function DataTable<T>({
                 <tr
                   key={String(getField(row, keyField) ?? i)}
                   onClick={() => onRowClick?.(row)}
-                  className={cn("transition-colors duration-100", onRowClick && "cursor-pointer")}
+                  onDoubleClick={() => onRowDoubleClick?.(row)}
+                  className={cn("transition-colors duration-100", isInteractive && "cursor-pointer")}
                   style={{ borderTop: "1px solid var(--border)" }}
                   onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--bg-elevated)"; }}
                   onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}
@@ -124,7 +128,7 @@ export function DataTable<T>({
                   ))}
                   {actions && (
                     <td className="px-5 py-4 text-right">
-                      <div onClick={(e) => e.stopPropagation()} className="flex items-center justify-end gap-1.5">
+                      <div onClick={(e) => e.stopPropagation()} onDoubleClick={(e) => e.stopPropagation()} className="flex items-center justify-end gap-1.5">
                         {actions(row)}
                       </div>
                     </td>

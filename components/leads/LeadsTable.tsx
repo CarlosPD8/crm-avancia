@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Users } from "lucide-react";
 import { DataTable, type Column } from "@/components/ui/DataTable";
 import { StatusBadge } from "@/components/ui/StatusBadge";
@@ -23,10 +23,6 @@ export type SerializedLead = {
   createdAt: string;
   updatedAt: string;
 };
-
-interface LeadsTableProps {
-  leads: SerializedLead[];
-}
 
 const columns: Column<SerializedLead>[] = [
   {
@@ -59,9 +55,7 @@ const columns: Column<SerializedLead>[] = [
     key: "industry",
     label: "Sector",
     sortable: true,
-    render: (val) => (
-      <span className="theme-tag">{String(val)}</span>
-    ),
+    render: (val) => <span className="theme-tag">{String(val)}</span>,
   },
   {
     key: "source",
@@ -85,7 +79,8 @@ const columns: Column<SerializedLead>[] = [
   },
 ];
 
-export function LeadsTable({ leads }: LeadsTableProps) {
+export function LeadsTable({ leads }: { leads: SerializedLead[] }) {
+  const router = useRouter();
   return (
     <DataTable<SerializedLead>
       columns={columns}
@@ -93,14 +88,8 @@ export function LeadsTable({ leads }: LeadsTableProps) {
       emptyIcon={Users}
       emptyTitle="Sin leads"
       emptyDescription="Crea tu primer lead o búscalo en el módulo de prospección."
-      actions={(row) => (
-        <>
-          <Link href={`/leads/${row.id}`}>
-            <Button size="sm" variant="ghost">Editar</Button>
-          </Link>
-          <DeleteLeadButton id={row.id} />
-        </>
-      )}
+      onRowDoubleClick={(row) => router.push(`/leads/${row.id}`)}
+      actions={(row) => <DeleteLeadButton id={row.id} />}
     />
   );
 }
