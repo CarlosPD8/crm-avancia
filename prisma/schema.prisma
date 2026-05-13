@@ -1,0 +1,90 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String        @id @default(cuid())
+  name         String
+  email        String        @unique
+  role         UserRole      @default(AGENT)
+  createdAt    DateTime      @default(now())
+  appointments Appointment[]
+}
+
+model Appointment {
+  id           String            @id @default(cuid())
+  companyName  String
+  contactName  String
+  email        String
+  phone        String?
+  date         DateTime
+  time         String
+  status       AppointmentStatus @default(PENDING)
+  notes        String?
+  assignedTo   String?
+  assignedUser User?             @relation(fields: [assignedTo], references: [id])
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+}
+
+model Lead {
+  id          String     @id @default(cuid())
+  companyName String
+  contactName String
+  email       String
+  phone       String?
+  website     String?
+  industry    String
+  source      LeadSource @default(MANUAL)
+  status      LeadStatus @default(NEW)
+  notes       String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model ProspectSearch {
+  id          String   @id @default(cuid())
+  industry    String
+  location    String
+  companySize String?
+  keywords    String?
+  createdAt   DateTime @default(now())
+}
+
+enum UserRole {
+  ADMIN
+  AGENT
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  DONE
+  CANCELLED
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  DISCARDED
+  CONVERTED
+}
+
+enum LeadSource {
+  MANUAL
+  GOOGLE_PLACES
+  LINKEDIN
+  APOLLO
+  CLAY
+  CLEARBIT
+  SERPAPI
+  REFERRAL
+  WEBSITE
+  OTHER
+}
