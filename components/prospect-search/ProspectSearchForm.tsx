@@ -54,10 +54,13 @@ export function ProspectSearchForm({ onResults, onError }: ProspectSearchFormPro
   });
 
   return (
-    <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-6">
+    <div
+      className="rounded-2xl p-6"
+      style={{ background: "var(--bg-card)", border: "1px solid var(--border)", boxShadow: "var(--shadow-card)" }}
+    >
       <div className="mb-5">
-        <h2 className="text-sm font-semibold text-slate-900">Parámetros de búsqueda</h2>
-        <p className="text-xs text-slate-400 mt-0.5">
+        <h2 className="text-sm font-semibold" style={{ color: "var(--text-1)" }}>Parámetros de búsqueda</h2>
+        <p className="text-xs mt-0.5" style={{ color: "var(--text-3)" }}>
           Define los criterios para encontrar nuevos clientes potenciales.
         </p>
       </div>
@@ -96,12 +99,15 @@ export function ProspectSearchForm({ onResults, onError }: ProspectSearchFormPro
         </div>
       </form>
 
-      <div className="mt-4 pt-4 border-t border-slate-50 flex items-center gap-2">
-        <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 font-medium">
+      <div className="mt-4 pt-4 flex items-center gap-2" style={{ borderTop: "1px solid var(--border)" }}>
+        <span
+          className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full font-medium"
+          style={{ background: "var(--success-muted)", color: "var(--success)", border: "1px solid var(--success-light)" }}
+        >
           ● Google Places
         </span>
-        <p className="text-xs text-slate-400">
-          <span className="font-medium text-slate-500">Próximas integraciones: </span>
+        <p className="text-xs" style={{ color: "var(--text-3)" }}>
+          <span className="font-medium" style={{ color: "var(--text-2)" }}>Próximas integraciones: </span>
           LinkedIn · Apollo · Clay · Clearbit · SerpAPI
         </p>
       </div>

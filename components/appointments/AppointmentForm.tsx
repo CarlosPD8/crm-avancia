@@ -145,7 +145,7 @@ export function AppointmentForm({ appointment, users, onSuccess }: AppointmentFo
         error={errors.notes?.message}
         {...register("notes")}
       />
-      <div className="flex items-center justify-end gap-3 pt-2 border-t border-slate-100">
+      <div className="flex items-center justify-end gap-3 pt-2" style={{ borderTop: "1px solid var(--border)" }}>
         <Button type="button" variant="secondary" onClick={() => router.back()}>
           Cancelar
         </Button>

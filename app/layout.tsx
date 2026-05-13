@@ -3,6 +3,7 @@ import { Geist } from "next/font/google";
 import "./globals.css";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Header } from "@/components/layout/Header";
+import { ThemeProvider } from "@/components/ui/ThemeProvider";
 
 const geist = Geist({
   variable: "--font-geist-sans",
@@ -22,15 +23,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className={`${geist.variable} h-full`}>
+    <html lang="es" className={`${geist.variable} h-full`} suppressHydrationWarning>
+      <head>
+        {/* Prevent flash of wrong theme */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var t=localStorage.getItem('crm-theme')||'dark';document.documentElement.classList.toggle('dark',t==='dark')})()`,
+          }}
+        />
+      </head>
       <body className="h-full antialiased">
-        <div className="flex h-full bg-slate-50">
-          <Sidebar />
-          <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
-            <Header />
-            {children}
+        <ThemeProvider>
+          <div className="flex h-full">
+            <Sidebar />
+            <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
+              <Header />
+              {children}
+            </div>
           </div>
-        </div>
+        </ThemeProvider>
       </body>
     </html>
   );

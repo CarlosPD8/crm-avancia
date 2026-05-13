@@ -23,8 +23,8 @@ export default function ProspectSearchPage() {
   return (
     <PageContainer>
       <div className="mb-2">
-        <h2 className="text-base font-semibold text-slate-900">Buscar clientes potenciales</h2>
-        <p className="text-sm text-slate-500 mt-0.5">
+        <h2 className="text-base font-semibold" style={{ color: "var(--text-1)" }}>Buscar clientes potenciales</h2>
+        <p className="text-sm mt-0.5" style={{ color: "var(--text-3)" }}>
           Encuentra nuevas oportunidades y conviértelas en leads con un clic.
         </p>
       </div>
@@ -32,7 +32,10 @@ export default function ProspectSearchPage() {
       <ProspectSearchForm onResults={handleResults} onError={handleError} />
 
       {error && (
-        <div className="rounded-lg bg-red-50 border border-red-100 px-4 py-3 text-sm text-red-700">
+        <div
+          className="rounded-lg px-4 py-3 text-sm"
+          style={{ background: "var(--danger-muted)", border: "1px solid var(--danger-light)", color: "var(--danger)" }}
+        >
           <span className="font-medium">Error: </span>{error}
         </div>
       )}

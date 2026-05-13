@@ -35,14 +35,12 @@ const columns: Column<SerializedLead>[] = [
     sortable: true,
     render: (_, row) => (
       <div className="flex items-center gap-2.5">
-        <div className="h-7 w-7 rounded-lg bg-slate-100 flex items-center justify-center shrink-0">
-          <span className="text-xs font-semibold text-slate-600">
-            {row.companyName.charAt(0)}
-          </span>
+        <div className="h-7 w-7 rounded-lg flex items-center justify-center shrink-0 theme-avatar-neutral">
+          <span className="text-xs font-semibold">{row.companyName.charAt(0)}</span>
         </div>
         <div>
-          <p className="font-medium text-slate-900">{row.companyName}</p>
-          <p className="text-xs text-slate-400">{row.contactName}</p>
+          <p className="font-medium" style={{ color: "var(--text-1)" }}>{row.companyName}</p>
+          <p className="text-xs" style={{ color: "var(--text-3)" }}>{row.contactName}</p>
         </div>
       </div>
     ),
@@ -50,28 +48,26 @@ const columns: Column<SerializedLead>[] = [
   {
     key: "email",
     label: "Email",
-    render: (val) => <span className="text-slate-600">{String(val)}</span>,
+    render: (val) => <span style={{ color: "var(--text-2)" }}>{String(val)}</span>,
   },
   {
     key: "phone",
     label: "Teléfono",
-    render: (val) => <span className="text-slate-500">{val ? String(val) : "—"}</span>,
+    render: (val) => <span style={{ color: "var(--text-2)" }}>{val ? String(val) : "—"}</span>,
   },
   {
     key: "industry",
     label: "Sector",
     sortable: true,
     render: (val) => (
-      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-600">
-        {String(val)}
-      </span>
+      <span className="theme-tag">{String(val)}</span>
     ),
   },
   {
     key: "source",
     label: "Fuente",
     render: (val) => (
-      <span className="text-slate-500 text-xs">{getLeadSourceLabel(val as LeadSource)}</span>
+      <span className="text-xs" style={{ color: "var(--text-3)" }}>{getLeadSourceLabel(val as LeadSource)}</span>
     ),
   },
   {
@@ -84,7 +80,7 @@ const columns: Column<SerializedLead>[] = [
     label: "Creado",
     sortable: true,
     render: (val) => (
-      <span className="text-slate-400 text-xs">{formatCreatedAt(String(val))}</span>
+      <span className="text-xs" style={{ color: "var(--text-3)" }}>{formatCreatedAt(String(val))}</span>
     ),
   },
 ];

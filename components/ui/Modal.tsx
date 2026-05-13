@@ -44,28 +44,53 @@ export function Modal({ open, onClose, title, description, children, size = "md"
       {/* Overlay */}
       <div
         ref={overlayRef}
-        className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
+        className="absolute inset-0 backdrop-blur-sm"
+        style={{ background: "var(--bg-overlay)" }}
         onClick={onClose}
       />
       {/* Dialog */}
       <div
         className={cn(
-          "relative w-full bg-white rounded-2xl shadow-xl border border-slate-100",
-          "max-h-[90vh] flex flex-col",
+          "relative w-full rounded-2xl max-h-[90vh] flex flex-col",
           sizeMap[size],
-          className
+          className,
         )}
+        style={{
+          background: "var(--bg-card)",
+          border: "1px solid var(--border)",
+          boxShadow: "var(--shadow-md)",
+        }}
       >
         {/* Header */}
         {(title || description) && (
-          <div className="flex items-start justify-between gap-4 px-6 pt-5 pb-4 border-b border-slate-100">
+          <div
+            className="flex items-start justify-between gap-4 px-6 pt-5 pb-4"
+            style={{ borderBottom: "1px solid var(--border)" }}
+          >
             <div>
-              {title && <h2 className="text-base font-semibold text-slate-900">{title}</h2>}
-              {description && <p className="mt-0.5 text-sm text-slate-500">{description}</p>}
+              {title && (
+                <h2 className="text-base font-semibold" style={{ color: "var(--text-1)" }}>
+                  {title}
+                </h2>
+              )}
+              {description && (
+                <p className="mt-0.5 text-sm" style={{ color: "var(--text-2)" }}>
+                  {description}
+                </p>
+              )}
             </div>
             <button
               onClick={onClose}
-              className="shrink-0 rounded-lg p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+              className="shrink-0 rounded-lg p-1.5 transition-colors"
+              style={{ color: "var(--text-3)", background: "transparent" }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.background = "var(--bg-elevated)";
+                (e.currentTarget as HTMLElement).style.color = "var(--text-1)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.background = "transparent";
+                (e.currentTarget as HTMLElement).style.color = "var(--text-3)";
+              }}
             >
               <X className="h-4 w-4" />
             </button>

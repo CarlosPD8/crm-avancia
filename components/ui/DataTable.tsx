@@ -32,88 +32,72 @@ interface DataTableProps<T> {
 type SortDir = "asc" | "desc";
 
 export function DataTable<T>({
-  columns,
-  data,
-  isLoading,
-  emptyIcon,
-  emptyTitle = "Sin resultados",
-  emptyDescription,
-  actions,
-  onRowClick,
-  keyField = "id",
-  className,
+  columns, data, isLoading,
+  emptyIcon, emptyTitle = "Sin resultados", emptyDescription,
+  actions, onRowClick, keyField = "id", className,
 }: DataTableProps<T>) {
   const [sortKey, setSortKey] = useState<string | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>("asc");
 
   const handleSort = (key: string) => {
-    if (sortKey === key) {
-      setSortDir((d) => (d === "asc" ? "desc" : "asc"));
-    } else {
-      setSortKey(key);
-      setSortDir("asc");
-    }
+    if (sortKey === key) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    else { setSortKey(key); setSortDir("asc"); }
   };
 
-  const getField = (row: T, key: string): unknown => {
-    return (row as Record<string, unknown>)[key];
-  };
+  const getField = (row: T, key: string): unknown => (row as Record<string, unknown>)[key];
 
   const sorted = [...data].sort((a, b) => {
     if (!sortKey) return 0;
-    const av = getField(a, sortKey);
-    const bv = getField(b, sortKey);
-    if (av === null || av === undefined) return 1;
-    if (bv === null || bv === undefined) return -1;
+    const av = getField(a, sortKey), bv = getField(b, sortKey);
+    if (av == null) return 1;
+    if (bv == null) return -1;
     const cmp = av < bv ? -1 : av > bv ? 1 : 0;
     return sortDir === "asc" ? cmp : -cmp;
   });
 
   return (
-    <div className={cn("bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden", className)}>
+    <div
+      className={cn("rounded-2xl overflow-hidden", className)}
+      style={{ background: "var(--bg-card)", border: "1px solid var(--border)", boxShadow: "var(--shadow-card)" }}
+    >
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-slate-100 bg-slate-50/70">
+            <tr style={{ borderBottom: "1px solid var(--border)", background: "var(--bg-elevated)" }}>
               {columns.map((col) => (
                 <th
                   key={col.key}
                   className={cn(
-                    "px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap",
-                    col.sortable && "cursor-pointer select-none hover:text-slate-700",
-                    col.headerClassName
+                    "px-5 py-3.5 text-left text-[11px] font-semibold uppercase tracking-wider whitespace-nowrap",
+                    col.sortable && "cursor-pointer select-none",
+                    col.headerClassName,
                   )}
+                  style={{ color: "var(--text-3)" }}
                   onClick={() => col.sortable && handleSort(col.key)}
                 >
                   <div className="flex items-center gap-1.5">
                     {col.label}
                     {col.sortable && (
-                      <span className="text-slate-300">
-                        {sortKey === col.key ? (
-                          sortDir === "asc" ? (
-                            <ChevronUp className="h-3.5 w-3.5 text-slate-500" />
-                          ) : (
-                            <ChevronDown className="h-3.5 w-3.5 text-slate-500" />
-                          )
-                        ) : (
-                          <ChevronsUpDown className="h-3.5 w-3.5" />
-                        )}
-                      </span>
+                      sortKey === col.key
+                        ? sortDir === "asc"
+                          ? <ChevronUp className="h-3.5 w-3.5" style={{ color: "var(--accent)" }} />
+                          : <ChevronDown className="h-3.5 w-3.5" style={{ color: "var(--accent)" }} />
+                        : <ChevronsUpDown className="h-3.5 w-3.5" style={{ color: "var(--border-strong)" }} />
                     )}
                   </div>
                 </th>
               ))}
               {actions && (
-                <th className="px-4 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                <th className="px-5 py-3.5 text-right text-[11px] font-semibold uppercase tracking-wider" style={{ color: "var(--text-3)" }}>
                   Acciones
                 </th>
               )}
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-50">
+          <tbody>
             {isLoading ? (
               <tr>
-                <td colSpan={columns.length + (actions ? 1 : 0)} className="py-12">
+                <td colSpan={columns.length + (actions ? 1 : 0)} className="py-16">
                   <LoadingSpinner className="py-4" />
                 </td>
               </tr>
@@ -128,27 +112,19 @@ export function DataTable<T>({
                 <tr
                   key={String(getField(row, keyField) ?? i)}
                   onClick={() => onRowClick?.(row)}
-                  className={cn(
-                    "transition-colors duration-100",
-                    onRowClick ? "cursor-pointer hover:bg-slate-50/80" : "hover:bg-slate-50/40"
-                  )}
+                  className={cn("transition-colors duration-100", onRowClick && "cursor-pointer")}
+                  style={{ borderTop: "1px solid var(--border)" }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--bg-elevated)"; }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}
                 >
                   {columns.map((col) => (
-                    <td
-                      key={col.key}
-                      className={cn("px-4 py-3.5 text-slate-700 whitespace-nowrap", col.className)}
-                    >
-                      {col.render
-                        ? col.render(getField(row, col.key), row)
-                        : String(getField(row, col.key) ?? "—")}
+                    <td key={col.key} className={cn("px-5 py-4 whitespace-nowrap", col.className)} style={{ color: "var(--text-2)" }}>
+                      {col.render ? col.render(getField(row, col.key), row) : String(getField(row, col.key) ?? "—")}
                     </td>
                   ))}
                   {actions && (
-                    <td className="px-4 py-3.5 text-right">
-                      <div
-                        onClick={(e) => e.stopPropagation()}
-                        className="flex items-center justify-end gap-1"
-                      >
+                    <td className="px-5 py-4 text-right">
+                      <div onClick={(e) => e.stopPropagation()} className="flex items-center justify-end gap-1.5">
                         {actions(row)}
                       </div>
                     </td>
@@ -160,8 +136,8 @@ export function DataTable<T>({
         </table>
       </div>
       {!isLoading && sorted.length > 0 && (
-        <div className="px-4 py-3 border-t border-slate-50 flex items-center justify-between">
-          <p className="text-xs text-slate-400">
+        <div className="px-5 py-3.5" style={{ borderTop: "1px solid var(--border)" }}>
+          <p className="text-xs" style={{ color: "var(--text-3)" }}>
             {sorted.length} {sorted.length === 1 ? "resultado" : "resultados"}
           </p>
         </div>

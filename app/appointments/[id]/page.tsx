@@ -24,17 +24,17 @@ export default async function AppointmentPage({ params }: AppointmentPageProps) 
     <PageContainer>
       <div className="max-w-3xl">
         <div className="mb-6">
-          <h2 className="text-base font-semibold text-slate-900">
+          <h2 className="text-base font-semibold" style={{ color: "var(--text-1)" }}>
             {isNew ? "Nueva cita" : "Editar cita"}
           </h2>
-          <p className="text-sm text-slate-500 mt-0.5">
+          <p className="text-sm mt-0.5" style={{ color: "var(--text-3)" }}>
             {isNew
               ? "Completa los datos para crear una nueva cita comercial."
               : `Editando cita con ${appointment?.companyName}.`}
           </p>
         </div>
 
-        <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-6">
+        <div className="rounded-2xl p-6" style={{ background: "var(--bg-card)", border: "1px solid var(--border)", boxShadow: "var(--shadow-card)" }}>
           <AppointmentForm
             appointment={appointment ?? undefined}
             users={users}

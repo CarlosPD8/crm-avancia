@@ -1,80 +1,218 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-
-  --color-background: #F8FAFC;
-  --color-surface: #FFFFFF;
-  --color-border: #E2E8F0;
-  --color-border-light: #F1F5F9;
-
-  --color-primary: #4F46E5;
-  --color-primary-hover: #4338CA;
-  --color-primary-light: #EEF2FF;
-
-  --color-slate-950: #020617;
-  --color-slate-900: #0F172A;
-  --color-slate-800: #1E293B;
-  --color-slate-700: #334155;
-  --color-slate-600: #475569;
-  --color-slate-500: #64748B;
-  --color-slate-400: #94A3B8;
-  --color-slate-300: #CBD5E1;
-  --color-slate-200: #E2E8F0;
-  --color-slate-100: #F1F5F9;
-  --color-slate-50: #F8FAFC;
 }
 
-* {
-  box-sizing: border-box;
+/* ─── Light tokens ─── */
+:root {
+  --bg:              #f0f2f5;
+  --bg-card:         #ffffff;
+  --bg-elevated:     #f4f5f8;
+  --bg-sidebar:      #ffffff;
+  --bg-input:        #f8f9fb;
+  --bg-overlay:      rgba(15, 20, 30, 0.45);
+
+  --border:          #e4e7ec;
+  --border-strong:   #c9cdd6;
+
+  --text-1:          #111827;
+  --text-2:          #4b5563;
+  --text-3:          #9ca3af;
+  --text-disabled:   #d1d5db;
+
+  --accent:          #6366f1;
+  --accent-hover:    #4f46e5;
+  --accent-light:    #eef2ff;
+  --accent-muted:    rgba(99, 102, 241, 0.12);
+
+  --success:         #10b981;
+  --success-light:   #d1fae5;
+  --success-muted:   rgba(16, 185, 129, 0.12);
+
+  --warning:         #f59e0b;
+  --warning-light:   #fef3c7;
+  --warning-muted:   rgba(245, 158, 11, 0.12);
+
+  --danger:          #ef4444;
+  --danger-light:    #fee2e2;
+  --danger-muted:    rgba(239, 68, 68, 0.12);
+
+  --info:            #3b82f6;
+  --info-light:      #dbeafe;
+  --info-muted:      rgba(59, 130, 246, 0.12);
+
+  --violet:          #8b5cf6;
+  --violet-muted:    rgba(139, 92, 246, 0.12);
+
+  --shadow-sm:       0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md:       0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+  --shadow-card:     0 1px 3px rgba(0, 0, 0, 0.05), 0 4px 16px rgba(0, 0, 0, 0.05);
 }
 
-html,
+/* ─── Dark tokens ─── */
+.dark {
+  --bg:              #0d0f14;
+  --bg-card:         #161a23;
+  --bg-elevated:     #1c2130;
+  --bg-sidebar:      #131720;
+  --bg-input:        #1c2130;
+  --bg-overlay:      rgba(0, 0, 0, 0.65);
+
+  --border:          #252c3b;
+  --border-strong:   #343d52;
+
+  --text-1:          #ffffff;
+  --text-2:          #a8b5c8;
+  --text-3:          #64748b;
+  --text-disabled:   #334155;
+
+  --accent:          #818cf8;
+  --accent-hover:    #6366f1;
+  --accent-light:    rgba(99, 102, 241, 0.15);
+  --accent-muted:    rgba(129, 140, 248, 0.12);
+
+  --success:         #34d399;
+  --success-light:   rgba(52, 211, 153, 0.15);
+  --success-muted:   rgba(52, 211, 153, 0.10);
+
+  --warning:         #fbbf24;
+  --warning-light:   rgba(251, 191, 36, 0.15);
+  --warning-muted:   rgba(251, 191, 36, 0.10);
+
+  --danger:          #f87171;
+  --danger-light:    rgba(248, 113, 113, 0.15);
+  --danger-muted:    rgba(248, 113, 113, 0.10);
+
+  --info:            #60a5fa;
+  --info-light:      rgba(96, 165, 250, 0.15);
+  --info-muted:      rgba(96, 165, 250, 0.10);
+
+  --violet:          #a78bfa;
+  --violet-muted:    rgba(167, 139, 250, 0.10);
+
+  --shadow-sm:       0 1px 3px rgba(0, 0, 0, 0.35);
+  --shadow-md:       0 4px 12px rgba(0, 0, 0, 0.45);
+  --shadow-card:     0 1px 4px rgba(0, 0, 0, 0.30), 0 4px 16px rgba(0, 0, 0, 0.20);
+}
+
+/* ─── Base ─── */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { height: 100%; }
+html { -webkit-font-smoothing: antialiased; }
+
 body {
-  height: 100%;
-}
-
-body {
-  background-color: #F8FAFC;
-  color: #0F172A;
+  background-color: var(--bg);
+  color: var(--text-1);
   font-family: var(--font-geist-sans), system-ui, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/* Subtle dot grid for dashboard main area */
-.dot-grid {
-  background-image: radial-gradient(circle, #CBD5E1 1px, transparent 1px);
-  background-size: 24px 24px;
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar          { width: 5px; height: 5px; }
+::-webkit-scrollbar-track    { background: transparent; }
+::-webkit-scrollbar-thumb    { background: var(--border-strong); border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
+
+/* ─── Selection ─── */
+::selection { background: var(--accent-muted); color: var(--accent); }
+
+/* ─── Focus ─── */
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ─── Placeholder ─── */
+::placeholder { color: var(--text-3); opacity: 1; }
+
+/* ─── Native select & option ─── */
+select option {
+  background: var(--bg-elevated);
+  color: var(--text-1);
 }
 
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+/* ─── Date/time input calendar icon ─── */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.5);
+  cursor: pointer;
+}
+.dark input[type="date"]::-webkit-calendar-picker-indicator,
+.dark input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.7);
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
+/* ─── Utility classes that use CSS variables ─── */
+/* Use these instead of hardcoded Tailwind color utilities */
+
+.theme-text-1    { color: var(--text-1); }
+.theme-text-2    { color: var(--text-2); }
+.theme-text-3    { color: var(--text-3); }
+
+.theme-bg-card     { background: var(--bg-card); }
+.theme-bg-elevated { background: var(--bg-elevated); }
+.theme-bg-input    { background: var(--bg-input); }
+
+.theme-border      { border-color: var(--border); }
+
+/* Card pattern */
+.theme-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+  border-radius: 1rem;
 }
 
-::-webkit-scrollbar-thumb {
-  background: #CBD5E1;
-  border-radius: 3px;
+/* Hover row — use on list rows inside cards */
+.theme-row-hover:hover {
+  background: var(--bg-elevated);
+  transition: background 0.1s ease;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #94A3B8;
+/* Divider between sibling elements */
+.theme-divide > * + * {
+  border-top: 1px solid var(--border);
 }
 
-/* Focus ring */
-:focus-visible {
-  outline: 2px solid #4F46E5;
-  outline-offset: 2px;
+/* Avatar — accent tint */
+.theme-avatar-accent {
+  background: var(--accent-light);
+  color: var(--accent);
 }
 
-/* Smooth transitions */
-.transition-base {
-  transition: all 150ms ease;
+/* Avatar — neutral */
+.theme-avatar-neutral {
+  background: var(--bg-elevated);
+  color: var(--text-2);
+}
+
+/* Source/tag pill */
+.theme-tag {
+  background: var(--bg-elevated);
+  color: var(--text-2);
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.theme-tag-success {
+  background: var(--success-muted);
+  color: var(--success);
+  border: 1px solid var(--success-light);
+  border-radius: 9999px;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.theme-tag-info {
+  background: var(--info-muted);
+  color: var(--info);
+  border: 1px solid var(--info-light);
+  border-radius: 9999px;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
 }

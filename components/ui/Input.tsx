@@ -14,7 +14,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="flex flex-col gap-1.5">
         {label && (
-          <label htmlFor={inputId} className="text-sm font-medium text-slate-700">
+          <label htmlFor={inputId} className="text-sm font-medium" style={{ color: "var(--text-2)" }}>
             {label}
           </label>
         )}
@@ -22,21 +22,32 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           id={inputId}
           className={cn(
-            "w-full px-3 py-2 text-sm rounded-lg border bg-white text-slate-900 placeholder:text-slate-400",
-            "transition-colors duration-150",
-            "focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500",
-            error
-              ? "border-red-300 focus:border-red-400 focus:ring-red-400/20"
-              : "border-slate-200 hover:border-slate-300",
-            className
+            "w-full px-3 py-2 text-sm rounded-lg transition-all duration-150",
+            "focus:outline-none focus:ring-2",
+            className,
           )}
+          style={{
+            background: "var(--bg-input)",
+            color: "var(--text-1)",
+            border: error ? "1px solid var(--danger)" : "1px solid var(--border)",
+          }}
+          onFocus={(e) => {
+            (e.target as HTMLElement).style.borderColor = "var(--accent)";
+            (e.target as HTMLElement).style.boxShadow = "0 0 0 3px var(--accent-muted)";
+            props.onFocus?.(e);
+          }}
+          onBlur={(e) => {
+            (e.target as HTMLElement).style.borderColor = error ? "var(--danger)" : "var(--border)";
+            (e.target as HTMLElement).style.boxShadow = "none";
+            props.onBlur?.(e);
+          }}
           {...props}
         />
-        {error && <p className="text-xs text-red-500">{error}</p>}
-        {hint && !error && <p className="text-xs text-slate-400">{hint}</p>}
+        {error && <p className="text-xs" style={{ color: "var(--danger)" }}>{error}</p>}
+        {hint && !error && <p className="text-xs" style={{ color: "var(--text-3)" }}>{hint}</p>}
       </div>
     );
-  }
+  },
 );
 
 Input.displayName = "Input";
