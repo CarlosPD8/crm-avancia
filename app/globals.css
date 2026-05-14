@@ -2,100 +2,107 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-jakarta);
 }
 
-/* ─── Light tokens ─── */
+/* ─── Light tokens — warm cream / linen ─── */
 :root {
-  --bg:              #f0f2f5;
-  --bg-card:         #ffffff;
-  --bg-elevated:     #f4f5f8;
-  --bg-sidebar:      #ffffff;
-  --bg-input:        #f8f9fb;
-  --bg-overlay:      rgba(15, 20, 30, 0.45);
+  --bg:              #EAE5D2;
+  --bg-card:         #FFFFFF;
+  --bg-elevated:     #F2EDE0;
+  --bg-sidebar:      #F8F7F2;
+  --bg-input:        #EDE8D8;
+  --bg-overlay:      rgba(20, 15, 5, 0.45);
 
-  --border:          #e4e7ec;
-  --border-strong:   #c9cdd6;
+  --border:          rgba(30, 22, 8, 0.09);
+  --border-strong:   rgba(30, 22, 8, 0.16);
 
-  --text-1:          #111827;
-  --text-2:          #4b5563;
-  --text-3:          #9ca3af;
-  --text-disabled:   #d1d5db;
+  --text-1:          #1A1814;
+  --text-2:          #4A4540;
+  --text-3:          #9A948E;
+  --text-disabled:   #C8C2BC;
 
-  --accent:          #6366f1;
-  --accent-hover:    #4f46e5;
-  --accent-light:    #eef2ff;
-  --accent-muted:    rgba(99, 102, 241, 0.12);
+  --accent:          #C9950A;
+  --accent-hover:    #B58308;
+  --accent-light:    #FFF3CC;
+  --accent-muted:    rgba(201, 149, 10, 0.14);
+  --accent-foreground: #FFFFFF;
 
-  --success:         #10b981;
-  --success-light:   #d1fae5;
-  --success-muted:   rgba(16, 185, 129, 0.12);
+  --nav-active-bg:   #1C1813;
+  --nav-active-text: #FFFFFF;
 
-  --warning:         #f59e0b;
+  --success:         #16a34a;
+  --success-light:   #dcfce7;
+  --success-muted:   rgba(22, 163, 74, 0.12);
+
+  --warning:         #d97706;
   --warning-light:   #fef3c7;
-  --warning-muted:   rgba(245, 158, 11, 0.12);
+  --warning-muted:   rgba(217, 119, 6, 0.12);
 
-  --danger:          #ef4444;
+  --danger:          #dc2626;
   --danger-light:    #fee2e2;
-  --danger-muted:    rgba(239, 68, 68, 0.12);
+  --danger-muted:    rgba(220, 38, 38, 0.12);
 
-  --info:            #3b82f6;
+  --info:            #2563eb;
   --info-light:      #dbeafe;
-  --info-muted:      rgba(59, 130, 246, 0.12);
+  --info-muted:      rgba(37, 99, 235, 0.12);
 
-  --violet:          #8b5cf6;
-  --violet-muted:    rgba(139, 92, 246, 0.12);
+  --violet:          #7c3aed;
+  --violet-muted:    rgba(124, 58, 237, 0.12);
 
-  --shadow-sm:       0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-md:       0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
-  --shadow-card:     0 1px 3px rgba(0, 0, 0, 0.05), 0 4px 16px rgba(0, 0, 0, 0.05);
+  --shadow-sm:       0 1px 2px rgba(0,0,0,0.05), 0 0 1px rgba(0,0,0,0.03);
+  --shadow-md:       0 4px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.04);
+  --shadow-card:     0 1px 4px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.05);
 }
 
-/* ─── Dark tokens ─── */
+/* ─── Dark tokens — deep navy blue ─── */
 .dark {
-  --bg:              #0d0f14;
-  --bg-card:         #161a23;
-  --bg-elevated:     #1c2130;
-  --bg-sidebar:      #131720;
-  --bg-input:        #1c2130;
+  --bg:              #0C1829;
+  --bg-card:         #112237;
+  --bg-elevated:     #172D47;
+  --bg-sidebar:      #0E1E35;
+  --bg-input:        #172D47;
   --bg-overlay:      rgba(0, 0, 0, 0.65);
 
-  --border:          #252c3b;
-  --border-strong:   #343d52;
+  --border:          rgba(100, 160, 220, 0.10);
+  --border-strong:   rgba(100, 160, 220, 0.18);
 
-  --text-1:          #ffffff;
-  --text-2:          #a8b5c8;
-  --text-3:          #64748b;
-  --text-disabled:   #334155;
+  --text-1:          #E8F0FA;
+  --text-2:          #8AAFC8;
+  --text-3:          #4E7090;
+  --text-disabled:   #2E4A65;
 
-  --accent:          #818cf8;
-  --accent-hover:    #6366f1;
-  --accent-light:    rgba(99, 102, 241, 0.15);
-  --accent-muted:    rgba(129, 140, 248, 0.12);
+  --accent:          #F0C040;
+  --accent-hover:    #E8B000;
+  --accent-light:    rgba(240, 192, 64, 0.15);
+  --accent-muted:    rgba(240, 192, 64, 0.12);
+  --accent-foreground: #1A1000;
 
-  --success:         #34d399;
-  --success-light:   rgba(52, 211, 153, 0.15);
-  --success-muted:   rgba(52, 211, 153, 0.10);
+  --nav-active-bg:   #F0C040;
+  --nav-active-text: #1A1000;
+
+  --success:         #4ade80;
+  --success-light:   rgba(74, 222, 128, 0.14);
+  --success-muted:   rgba(74, 222, 128, 0.10);
 
   --warning:         #fbbf24;
-  --warning-light:   rgba(251, 191, 36, 0.15);
+  --warning-light:   rgba(251, 191, 36, 0.14);
   --warning-muted:   rgba(251, 191, 36, 0.10);
 
   --danger:          #f87171;
-  --danger-light:    rgba(248, 113, 113, 0.15);
+  --danger-light:    rgba(248, 113, 113, 0.14);
   --danger-muted:    rgba(248, 113, 113, 0.10);
 
   --info:            #60a5fa;
-  --info-light:      rgba(96, 165, 250, 0.15);
+  --info-light:      rgba(96, 165, 250, 0.14);
   --info-muted:      rgba(96, 165, 250, 0.10);
 
   --violet:          #a78bfa;
-  --violet-muted:    rgba(167, 139, 250, 0.10);
+  --violet-muted:    rgba(167, 139, 250, 0.12);
 
-  --shadow-sm:       0 1px 3px rgba(0, 0, 0, 0.35);
-  --shadow-md:       0 4px 12px rgba(0, 0, 0, 0.45);
-  --shadow-card:     0 1px 4px rgba(0, 0, 0, 0.30), 0 4px 16px rgba(0, 0, 0, 0.20);
+  --shadow-sm:       0 1px 3px rgba(0,0,0,0.35);
+  --shadow-md:       0 4px 14px rgba(0,0,0,0.45);
+  --shadow-card:     0 2px 8px rgba(0,0,0,0.28), 0 0 1px rgba(100,160,220,0.08);
 }
 
 /* ─── Base ─── */
@@ -106,8 +113,8 @@ html { -webkit-font-smoothing: antialiased; }
 body {
   background-color: var(--bg);
   color: var(--text-1);
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  font-family: var(--font-jakarta), system-ui, sans-serif;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 /* ─── Scrollbar ─── */
@@ -142,9 +149,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   filter: invert(0.7);
 }
 
-/* ─── Utility classes that use CSS variables ─── */
-/* Use these instead of hardcoded Tailwind color utilities */
-
+/* ─── Utility classes ─── */
 .theme-text-1    { color: var(--text-1); }
 .theme-text-2    { color: var(--text-2); }
 .theme-text-3    { color: var(--text-3); }
@@ -155,7 +160,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 .theme-border      { border-color: var(--border); }
 
-/* Card pattern */
 .theme-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -163,30 +167,25 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   border-radius: 1rem;
 }
 
-/* Hover row — use on list rows inside cards */
 .theme-row-hover:hover {
   background: var(--bg-elevated);
   transition: background 0.1s ease;
 }
 
-/* Divider between sibling elements */
 .theme-divide > * + * {
   border-top: 1px solid var(--border);
 }
 
-/* Avatar — accent tint */
 .theme-avatar-accent {
   background: var(--accent-light);
   color: var(--accent);
 }
 
-/* Avatar — neutral */
 .theme-avatar-neutral {
   background: var(--bg-elevated);
   color: var(--text-2);
 }
 
-/* Source/tag pill */
 .theme-tag {
   background: var(--bg-elevated);
   color: var(--text-2);

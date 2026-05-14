@@ -29,7 +29,7 @@ export function MetricCard({
   const content = (
     <div
       className={cn(
-        "rounded-2xl p-5 flex items-start justify-between gap-4 transition-all duration-150",
+        "rounded-2xl p-5 flex flex-col justify-between gap-4 transition-all duration-150",
         href && "hover:scale-[1.01] cursor-pointer",
         className,
       )}
@@ -39,22 +39,33 @@ export function MetricCard({
         boxShadow: "var(--shadow-card)",
       }}
     >
-      <div className="flex flex-col gap-1.5 min-w-0">
-        <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "var(--text-3)" }}>
-          {title}
-        </p>
-        <p className="text-2xl font-bold tabular-nums tracking-tight" style={{ color: "var(--text-1)" }}>
-          {value}
-        </p>
-        {description && (
-          <p className="text-xs" style={{ color: "var(--text-3)" }}>{description}</p>
-        )}
-      </div>
+      {/* Icon badge */}
       <div
-        className="rounded-xl p-2.5 shrink-0"
+        className="h-10 w-10 rounded-xl flex items-center justify-center shrink-0"
         style={{ background: c.light }}
       >
         <Icon className="h-5 w-5" strokeWidth={2} style={{ color: c.color }} />
+      </div>
+
+      {/* Value + label */}
+      <div>
+        <p
+          className="text-3xl font-bold tabular-nums tracking-tight leading-none mb-1.5"
+          style={{ color: "var(--text-1)" }}
+        >
+          {value}
+        </p>
+        <p
+          className="text-xs font-semibold uppercase tracking-wider"
+          style={{ color: "var(--text-3)" }}
+        >
+          {title}
+        </p>
+        {description && (
+          <p className="text-xs mt-1" style={{ color: "var(--text-3)" }}>
+            {description}
+          </p>
+        )}
       </div>
     </div>
   );

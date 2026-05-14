@@ -12,10 +12,27 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = "primary", size = "md", loading, disabled, children, ...props }, ref) => {
     const styles: Record<string, React.CSSProperties> = {
-      primary:   { background: "var(--accent)",      color: "#fff",            border: "1px solid transparent", boxShadow: "0 4px 12px var(--accent-muted)" },
-      secondary: { background: "var(--bg-elevated)", color: "var(--text-1)",   border: "1px solid var(--border)" },
-      danger:    { background: "var(--danger)",      color: "#fff",            border: "1px solid transparent" },
-      ghost:     { background: "transparent",        color: "var(--text-2)",   border: "1px solid transparent" },
+      primary:   {
+        background: "var(--accent)",
+        color: "var(--accent-foreground)",
+        border: "1px solid transparent",
+        boxShadow: "0 2px 8px var(--accent-muted)",
+      },
+      secondary: {
+        background: "var(--bg-elevated)",
+        color: "var(--text-1)",
+        border: "1px solid var(--border)",
+      },
+      danger:    {
+        background: "var(--danger)",
+        color: "#fff",
+        border: "1px solid transparent",
+      },
+      ghost:     {
+        background: "transparent",
+        color: "var(--text-2)",
+        border: "1px solid transparent",
+      },
     };
 
     return (
@@ -24,7 +41,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={disabled || loading}
         style={styles[variant]}
         className={cn(
-          "inline-flex items-center justify-center gap-2 font-medium rounded-xl",
+          "inline-flex items-center justify-center gap-2 font-semibold rounded-xl",
           "transition-all duration-150 cursor-pointer select-none",
           "hover:opacity-80 active:scale-[0.97]",
           "disabled:opacity-40 disabled:cursor-not-allowed",

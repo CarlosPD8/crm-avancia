@@ -3,6 +3,7 @@ export const dynamic = "force-dynamic";
 import { prisma } from "@/lib/prisma";
 import { getStartOfDay, getEndOfDay, getStartOfWeek, getEndOfWeek } from "@/lib/utils";
 import { MetricsGrid } from "@/components/dashboard/MetricsGrid";
+import { DashboardGreeting } from "@/components/dashboard/DashboardGreeting";
 import { UpcomingAppointments } from "@/components/dashboard/UpcomingAppointments";
 import { LatestLeads } from "@/components/dashboard/LatestLeads";
 import { PageContainer } from "@/components/layout/PageContainer";
@@ -47,6 +48,7 @@ export default async function DashboardPage() {
 
   return (
     <PageContainer>
+      <DashboardGreeting />
       <MetricsGrid
         todayAppointments={todayAppointments}
         weekAppointments={weekAppointments}
