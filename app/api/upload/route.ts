@@ -44,8 +44,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (file.size > 20 * 1024 * 1024) {
-      return NextResponse.json({ error: "El archivo no puede superar 20 MB" }, { status: 400 });
+    if (file.size > 100 * 1024 * 1024) {
+      return NextResponse.json({ error: "El archivo no puede superar 100 MB" }, { status: 400 });
     }
 
     await mkdir(UPLOAD_DIR, { recursive: true });

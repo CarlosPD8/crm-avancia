@@ -70,8 +70,8 @@ export function FileUploadZone({
 
     const uploaded: PendingFile[] = [];
     for (const file of Array.from(fileList)) {
-      if (file.size > 20 * 1024 * 1024) {
-        setError(`"${file.name}" supera el límite de 20 MB`);
+      if (file.size > 100 * 1024 * 1024) {
+        setError(`"${file.name}" supera el límite de 100 MB`);
         continue;
       }
       const fd = new FormData();
@@ -137,7 +137,7 @@ export function FileUploadZone({
       >
         {uploading
           ? <><Loader2 className="h-4 w-4 animate-spin" /><span className="text-sm font-medium">Subiendo...</span></>
-          : <><Upload className="h-4 w-4" /><span className="text-sm font-medium">{hasFiles ? "Añadir más archivos" : "Adjuntar archivos"}</span><span className="text-xs opacity-70">PDF, Word, Excel, imágenes — máx. 20 MB</span></>
+          : <><Upload className="h-4 w-4" /><span className="text-sm font-medium">{hasFiles ? "Añadir más archivos" : "Adjuntar archivos"}</span><span className="text-xs opacity-70">PDF, Word, Excel, imágenes — máx. 100 MB</span></>
         }
       </button>
 
