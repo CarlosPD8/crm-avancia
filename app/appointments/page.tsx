@@ -40,7 +40,7 @@ export default async function AppointmentsPage({ searchParams }: AppointmentsPag
   const appointments = await prisma.appointment.findMany({
     where,
     orderBy: { date: "asc" },
-    include: { assignedUser: true },
+    include: { assignedUser: true, files: { orderBy: { createdAt: "asc" } } },
   });
 
   // Serialize Dates → strings before passing to Client Component
@@ -52,6 +52,7 @@ export default async function AppointmentsPage({ searchParams }: AppointmentsPag
     assignedUser: a.assignedUser
       ? { id: a.assignedUser.id, name: a.assignedUser.name }
       : null,
+    files: a.files.map((f) => ({ id: f.id, filename: f.filename, originalName: f.originalName, size: f.size })),
   }));
 
   return (
