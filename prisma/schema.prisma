@@ -29,8 +29,19 @@ model Appointment {
   notes        String?
   assignedTo   String?
   assignedUser User?             @relation(fields: [assignedTo], references: [id])
+  files        AppointmentFile[]
   createdAt    DateTime          @default(now())
   updatedAt    DateTime          @updatedAt
+}
+
+model AppointmentFile {
+  id            String      @id @default(cuid())
+  appointmentId String
+  appointment   Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+  filename      String
+  originalName  String
+  size          Int
+  createdAt     DateTime    @default(now())
 }
 
 model Lead {
@@ -60,12 +71,20 @@ model Proposal {
   status      ProposalStatus @default(DRAFT)
   value       Float?
   notes       String?
-  pdfPath     String?
-  pdfName     String?
-  pdfSize     Int?
+  files       ProposalFile[]
   sentAt      DateTime?
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
+}
+
+model ProposalFile {
+  id           String   @id @default(cuid())
+  proposalId   String
+  proposal     Proposal @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+  filename     String
+  originalName String
+  size         Int
+  createdAt    DateTime @default(now())
 }
 
 model ProspectSearch {

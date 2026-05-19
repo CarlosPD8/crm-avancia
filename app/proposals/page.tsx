@@ -10,6 +10,7 @@ import { ProposalsTable } from "@/components/proposals/ProposalsTable";
 export default async function ProposalsPage() {
   const proposals = await prisma.proposal.findMany({
     orderBy: { createdAt: "desc" },
+    include: { files: { orderBy: { createdAt: "asc" } } },
   });
 
   const serialized = proposals.map((p) => ({
@@ -19,8 +20,7 @@ export default async function ProposalsPage() {
     email: p.email,
     status: p.status,
     value: p.value,
-    pdfPath: p.pdfPath,
-    pdfName: p.pdfName,
+    files: p.files.map((f) => ({ id: f.id, filename: f.filename, originalName: f.originalName, size: f.size })),
     sentAt: p.sentAt?.toISOString() ?? null,
     createdAt: p.createdAt.toISOString(),
   }));

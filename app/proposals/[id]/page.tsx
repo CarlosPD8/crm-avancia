@@ -16,7 +16,10 @@ export default async function ProposalPage({ params }: ProposalPageProps) {
   const [proposal, leads] = await Promise.all([
     isNew
       ? null
-      : prisma.proposal.findUnique({ where: { id } }),
+      : prisma.proposal.findUnique({
+          where: { id },
+          include: { files: { orderBy: { createdAt: "asc" } } },
+        }),
     prisma.lead.findMany({
       orderBy: { companyName: "asc" },
       select: { id: true, companyName: true, contactName: true, email: true, phone: true },
@@ -32,6 +35,12 @@ export default async function ProposalPage({ params }: ProposalPageProps) {
         sentAt: proposal.sentAt?.toISOString().split("T")[0] ?? null,
         createdAt: proposal.createdAt.toISOString(),
         updatedAt: proposal.updatedAt.toISOString(),
+        files: proposal.files.map((f) => ({
+          id: f.id,
+          filename: f.filename,
+          originalName: f.originalName,
+          size: f.size,
+        })),
       }
     : undefined;
 
@@ -44,8 +53,8 @@ export default async function ProposalPage({ params }: ProposalPageProps) {
           </h2>
           <p className="text-sm mt-0.5" style={{ color: "var(--text-3)" }}>
             {isNew
-              ? "Completa los datos y adjunta el dosier en PDF."
-              : "Actualiza la información o sube un nuevo dosier."}
+              ? "Completa los datos y adjunta los documentos necesarios."
+              : "Actualiza la información o gestiona los archivos adjuntos."}
           </p>
         </div>
 

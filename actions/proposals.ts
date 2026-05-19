@@ -9,7 +9,18 @@ import path from "path";
 
 const UPLOAD_DIR = process.env.UPLOAD_DIR ?? path.join(process.cwd(), "uploads");
 
-export async function createProposal(data: unknown): Promise<ActionResult<{ id: string }>> {
+type FileInput = { filename: string; originalName: string; size: number };
+
+async function deleteFiles(files: { filename: string }[]) {
+  await Promise.allSettled(
+    files.map((f) => unlink(path.join(UPLOAD_DIR, path.basename(f.filename))).catch(() => {})),
+  );
+}
+
+export async function createProposal(
+  data: unknown,
+  newFiles: FileInput[] = [],
+): Promise<ActionResult<{ id: string }>> {
   const parsed = proposalSchema.safeParse(data);
   if (!parsed.success) {
     return {
@@ -27,6 +38,9 @@ export async function createProposal(data: unknown): Promise<ActionResult<{ id: 
       value: value ?? null,
       leadId: leadId || null,
       sentAt: sentAt ? new Date(sentAt) : null,
+      files: newFiles.length > 0
+        ? { create: newFiles.map((f) => ({ filename: f.filename, originalName: f.originalName, size: f.size })) }
+        : undefined,
     },
   });
 
@@ -34,7 +48,12 @@ export async function createProposal(data: unknown): Promise<ActionResult<{ id: 
   return { success: true, data: { id: proposal.id } };
 }
 
-export async function updateProposal(id: string, data: unknown): Promise<ActionResult<{ id: string }>> {
+export async function updateProposal(
+  id: string,
+  data: unknown,
+  newFiles: FileInput[] = [],
+  removedFileIds: string[] = [],
+): Promise<ActionResult<{ id: string }>> {
   const parsed = proposalSchema.safeParse(data);
   if (!parsed.success) {
     return {
@@ -46,6 +65,15 @@ export async function updateProposal(id: string, data: unknown): Promise<ActionR
 
   const { sentAt, value, leadId, ...rest } = parsed.data;
 
+  // Get files to delete from disk before removing DB records
+  let filesToDelete: { filename: string }[] = [];
+  if (removedFileIds.length > 0) {
+    filesToDelete = await prisma.proposalFile.findMany({
+      where: { id: { in: removedFileIds } },
+      select: { filename: true },
+    });
+  }
+
   const proposal = await prisma.proposal.update({
     where: { id },
     data: {
@@ -53,8 +81,16 @@ export async function updateProposal(id: string, data: unknown): Promise<ActionR
       value: value ?? null,
       leadId: leadId || null,
       sentAt: sentAt ? new Date(sentAt) : null,
+      files: {
+        ...(removedFileIds.length > 0 ? { deleteMany: { id: { in: removedFileIds } } } : {}),
+        ...(newFiles.length > 0
+          ? { create: newFiles.map((f) => ({ filename: f.filename, originalName: f.originalName, size: f.size })) }
+          : {}),
+      },
     },
   });
+
+  await deleteFiles(filesToDelete);
 
   revalidatePath("/proposals");
   revalidatePath(`/proposals/${proposal.id}`);
@@ -62,18 +98,14 @@ export async function updateProposal(id: string, data: unknown): Promise<ActionR
 }
 
 export async function deleteProposal(id: string): Promise<ActionResult> {
-  const proposal = await prisma.proposal.findUnique({ where: { id } });
-  if (!proposal) return { success: false, error: "No encontrado" };
+  const files = await prisma.proposalFile.findMany({
+    where: { proposalId: id },
+    select: { filename: true },
+  });
 
-  if (proposal.pdfPath) {
-    try {
-      await unlink(path.join(UPLOAD_DIR, path.basename(proposal.pdfPath)));
-    } catch {
-      // File already gone — continue
-    }
-  }
+  await prisma.proposal.delete({ where: { id } }); // cascade deletes ProposalFile rows
+  await deleteFiles(files);
 
-  await prisma.proposal.delete({ where: { id } });
   revalidatePath("/proposals");
   return { success: true, data: undefined };
 }

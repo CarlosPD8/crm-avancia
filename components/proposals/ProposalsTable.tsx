@@ -1,12 +1,14 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { FileText, ExternalLink } from "lucide-react";
+import { FileText, ExternalLink, Files } from "lucide-react";
 import { DataTable, type Column } from "@/components/ui/DataTable";
 import { ProposalStatusBadge } from "./ProposalStatusBadge";
 import { DeleteProposalButton } from "@/app/proposals/DeleteProposalButton";
 import { formatCreatedAt } from "@/lib/utils";
 import type { ProposalStatus } from "@prisma/client";
+
+type ProposalFile = { id: string; filename: string; originalName: string; size: number };
 
 export type SerializedProposal = {
   id: string;
@@ -15,8 +17,7 @@ export type SerializedProposal = {
   email: string;
   status: ProposalStatus;
   value: number | null;
-  pdfPath: string | null;
-  pdfName: string | null;
+  files: ProposalFile[];
   sentAt: string | null;
   createdAt: string;
 };
@@ -57,26 +58,42 @@ const columns: Column<SerializedProposal>[] = [
       ),
   },
   {
-    key: "pdfName",
-    label: "Dosier",
-    render: (_, row) =>
-      row.pdfPath ? (
-        <a
-          href={`/api/files/${row.pdfPath}`}
-          target="_blank"
-          rel="noopener noreferrer"
+    key: "files",
+    label: "Archivos",
+    render: (_, row) => {
+      if (row.files.length === 0) {
+        return <span className="text-xs" style={{ color: "var(--text-3)" }}>Sin archivos</span>;
+      }
+      if (row.files.length === 1) {
+        const f = row.files[0];
+        return (
+          <a
+            href={`/api/files/${f.filename}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            onDoubleClick={(e) => e.stopPropagation()}
+            className="inline-flex items-center gap-1.5 text-xs font-medium transition-opacity hover:opacity-70"
+            style={{ color: "var(--accent)" }}
+          >
+            <FileText className="h-3.5 w-3.5" />
+            <span className="truncate max-w-30">{f.originalName}</span>
+            <ExternalLink className="h-3 w-3 shrink-0" />
+          </a>
+        );
+      }
+      return (
+        <div
+          className="inline-flex items-center gap-1.5 text-xs font-medium"
+          style={{ color: "var(--accent)" }}
           onClick={(e) => e.stopPropagation()}
           onDoubleClick={(e) => e.stopPropagation()}
-          className="inline-flex items-center gap-1.5 text-xs font-medium transition-opacity hover:opacity-70"
-          style={{ color: "var(--accent)" }}
         >
-          <FileText className="h-3.5 w-3.5" />
-          {row.pdfName ?? "PDF"}
-          <ExternalLink className="h-3 w-3" />
-        </a>
-      ) : (
-        <span className="text-xs" style={{ color: "var(--text-3)" }}>Sin PDF</span>
-      ),
+          <Files className="h-3.5 w-3.5" />
+          <span>{row.files.length} archivos</span>
+        </div>
+      );
+    },
   },
   {
     key: "sentAt",

@@ -14,11 +14,34 @@ export default async function AppointmentPage({ params }: AppointmentPageProps) 
   const isNew = id === "new";
 
   const [appointment, users] = await Promise.all([
-    isNew ? null : prisma.appointment.findUnique({ where: { id }, include: { assignedUser: true } }),
+    isNew
+      ? null
+      : prisma.appointment.findUnique({
+          where: { id },
+          include: {
+            assignedUser: true,
+            files: { orderBy: { createdAt: "asc" } },
+          },
+        }),
     prisma.user.findMany({ orderBy: { name: "asc" } }),
   ]);
 
   if (!isNew && !appointment) notFound();
+
+  const serialized = appointment
+    ? {
+        ...appointment,
+        date: appointment.date,
+        createdAt: appointment.createdAt,
+        updatedAt: appointment.updatedAt,
+        files: appointment.files.map((f) => ({
+          id: f.id,
+          filename: f.filename,
+          originalName: f.originalName,
+          size: f.size,
+        })),
+      }
+    : undefined;
 
   return (
     <PageContainer>
@@ -34,11 +57,15 @@ export default async function AppointmentPage({ params }: AppointmentPageProps) 
           </p>
         </div>
 
-        <div className="rounded-2xl p-6" style={{ background: "var(--bg-card)", border: "1px solid var(--border)", boxShadow: "var(--shadow-card)" }}>
-          <AppointmentForm
-            appointment={appointment ?? undefined}
-            users={users}
-          />
+        <div
+          className="rounded-2xl p-6"
+          style={{
+            background: "var(--bg-card)",
+            border: "1px solid var(--border)",
+            boxShadow: "var(--shadow-card)",
+          }}
+        >
+          <AppointmentForm appointment={serialized ?? undefined} users={users} />
         </div>
       </div>
     </PageContainer>

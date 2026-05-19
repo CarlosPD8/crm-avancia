@@ -7,6 +7,25 @@ export const runtime = "nodejs";
 
 const UPLOAD_DIR = process.env.UPLOAD_DIR ?? path.join(process.cwd(), "uploads");
 
+const ALLOWED_MIMES = new Set([
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/vnd.ms-excel",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "application/vnd.ms-powerpoint",
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "application/octet-stream",
+]);
+
+const ALLOWED_EXTENSIONS = new Set([
+  ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx",
+  ".jpg", ".jpeg", ".png", ".webp",
+]);
+
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
@@ -16,10 +35,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "No se ha enviado ningún archivo" }, { status: 400 });
     }
 
-    // Accept by MIME type OR extension — some browsers send application/octet-stream
-    const isPdf = file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
-    if (!isPdf) {
-      return NextResponse.json({ error: "Solo se permiten archivos PDF" }, { status: 400 });
+    const ext = path.extname(file.name).toLowerCase();
+    const isAllowed = ALLOWED_MIMES.has(file.type) || ALLOWED_EXTENSIONS.has(ext);
+    if (!isAllowed) {
+      return NextResponse.json(
+        { error: "Tipo de archivo no permitido. Se aceptan PDF, Word, Excel, PowerPoint e imágenes." },
+        { status: 400 },
+      );
     }
 
     if (file.size > 20 * 1024 * 1024) {
@@ -39,7 +61,6 @@ export async function POST(request: NextRequest) {
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     console.error("[Upload] Error:", message);
-    // Return the real error so it's visible in the UI during debugging
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
