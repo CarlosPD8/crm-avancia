@@ -38,8 +38,6 @@ type LeadOption = {
   contactName?: string | null;
   email?: string | null;
   phone?: string | null;
-  address?: string | null;
-  taxId?: string | null;
 };
 
 interface InvoiceFormProps {
@@ -125,8 +123,6 @@ export function InvoiceForm({ invoice, leads = [], proposals = [] }: InvoiceForm
     if (lead.contactName) setValue("contactName", lead.contactName);
     if (lead.email) setValue("email", lead.email);
     if (lead.phone) setValue("phone", lead.phone ?? "");
-    if (lead.address) setValue("address", lead.address ?? "");
-    if (lead.taxId) setValue("taxId", lead.taxId ?? "");
   }, [watchedLeadId, leads, setValue]);
 
   const subtotal = watchedItems.reduce((s, i) => s + (Number(i?.quantity) || 0) * (Number(i?.unitPrice) || 0), 0);

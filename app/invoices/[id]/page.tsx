@@ -28,7 +28,7 @@ export default async function InvoicePage({ params }: Props) {
       },
     }),
     prisma.lead.findMany({
-      select: { id: true, companyName: true, contactName: true, email: true, phone: true, address: true, taxId: true },
+      select: { id: true, companyName: true, contactName: true, email: true, phone: true },
       orderBy: { companyName: "asc" },
     }),
     prisma.proposal.findMany({ select: { id: true, companyName: true }, orderBy: { companyName: "asc" } }),
