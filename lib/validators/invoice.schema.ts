@@ -16,11 +16,11 @@ export const invoiceSchema = z.object({
   taxId: z.string().optional().nullable(),
   leadId: z.string().optional().nullable(),
   proposalId: z.string().optional().nullable(),
-  taxRate: z.number().min(0).max(100).default(21),
-  discountAmount: z.number().min(0).default(0),
+  taxRate: z.number().min(0).max(100),
+  discountAmount: z.number().min(0),
   issueDate: z.string().min(1, "La fecha de emisión es obligatoria"),
   dueDate: z.string().min(1, "La fecha de vencimiento es obligatoria"),
-  isRecurring: z.boolean().default(false),
+  isRecurring: z.boolean(),
   recurringPeriod: z.string().optional().nullable(),
   notes: z.string().optional().nullable(),
   items: z.array(invoiceItemSchema).min(1, "Añade al menos un concepto"),
@@ -29,7 +29,7 @@ export const invoiceSchema = z.object({
 export type InvoiceSchema = z.infer<typeof invoiceSchema>;
 
 export const paymentSchema = z.object({
-  amount: z.coerce.number().min(0.01, "El importe debe ser mayor que 0"),
+  amount: z.number().min(0.01, "El importe debe ser mayor que 0"),
   method: z.enum(["TRANSFER", "CARD", "CASH", "CHEQUE", "OTHER"]),
   date: z.string().min(1, "La fecha es obligatoria"),
   notes: z.string().optional().nullable(),
