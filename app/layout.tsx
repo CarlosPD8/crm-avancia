@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
+import { headers } from "next/headers";
 import "./globals.css";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Header } from "@/components/layout/Header";
@@ -17,15 +18,18 @@ export const metadata: Metadata = {
   icons: { icon: "/logo.png", apple: "/logo.png" },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headersList = await headers();
+  const pathname = headersList.get("x-pathname") ?? "";
+  const isPrint = pathname.endsWith("/print");
+
   return (
     <html lang="es" className={`${jakartaSans.variable} h-full`} suppressHydrationWarning>
       <head>
-        {/* Prevent flash of wrong theme */}
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){var t=localStorage.getItem('crm-theme')||'dark';document.documentElement.classList.toggle('dark',t==='dark')})()`,
@@ -33,15 +37,19 @@ export default function RootLayout({
         />
       </head>
       <body className="h-full antialiased">
-        <ThemeProvider>
-          <div className="flex h-full">
-            <Sidebar />
-            <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
-              <Header />
-              {children}
+        {isPrint ? (
+          children
+        ) : (
+          <ThemeProvider>
+            <div className="flex h-full">
+              <Sidebar />
+              <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
+                <Header />
+                {children}
+              </div>
             </div>
-          </div>
-        </ThemeProvider>
+          </ThemeProvider>
+        )}
       </body>
     </html>
   );
