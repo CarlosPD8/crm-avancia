@@ -58,7 +58,7 @@ export function PaymentModal({ invoiceId, pendingAmount, open, onClose }: Paymen
               type="number"
               step="0.01"
               min="0.01"
-              {...register("amount")}
+              {...register("amount", { valueAsNumber: true })}
               error={errors.amount?.message}
             />
           </div>
@@ -94,7 +94,7 @@ export function PaymentModal({ invoiceId, pendingAmount, open, onClose }: Paymen
 
         <div className="flex justify-end gap-2 pt-2">
           <Button type="button" variant="secondary" onClick={onClose}>Cancelar</Button>
-          <Button type="submit" isLoading={isSubmitting}>Registrar pago</Button>
+          <Button type="submit" loading={isSubmitting}>Registrar pago</Button>
         </div>
       </form>
     </Modal>

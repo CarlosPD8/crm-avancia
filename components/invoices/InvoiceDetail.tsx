@@ -97,7 +97,7 @@ export function InvoiceDetail({
           <Pencil className="h-4 w-4" />Editar
         </Button>
         {canSend && (
-          <Button onClick={handleSend} isLoading={loading === "send"}>
+          <Button onClick={handleSend} loading={loading === "send"}>
             <Send className="h-4 w-4" />Marcar como enviada
           </Button>
         )}
@@ -107,7 +107,7 @@ export function InvoiceDetail({
           </Button>
         )}
         {canCancel && (
-          <Button variant="danger" onClick={handleCancel} isLoading={loading === "cancel"}>
+          <Button variant="danger" onClick={handleCancel} loading={loading === "cancel"}>
             <Ban className="h-4 w-4" />Cancelar
           </Button>
         )}

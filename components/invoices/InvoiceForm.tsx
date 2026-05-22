@@ -252,7 +252,7 @@ export function InvoiceForm({ invoice, leads = [], proposals = [] }: InvoiceForm
                   type="number"
                   step="0.01"
                   min="0"
-                  {...register(`items.${index}.quantity`)}
+                  {...register(`items.${index}.quantity`, { valueAsNumber: true })}
                   className="text-right"
                   error={errors.items?.[index]?.quantity?.message}
                 />
@@ -260,7 +260,7 @@ export function InvoiceForm({ invoice, leads = [], proposals = [] }: InvoiceForm
                   type="number"
                   step="0.01"
                   min="0"
-                  {...register(`items.${index}.unitPrice`)}
+                  {...register(`items.${index}.unitPrice`, { valueAsNumber: true })}
                   className="text-right"
                   error={errors.items?.[index]?.unitPrice?.message}
                 />
@@ -305,11 +305,11 @@ export function InvoiceForm({ invoice, leads = [], proposals = [] }: InvoiceForm
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 mb-4">
             <div>
               <label className="block text-xs font-medium mb-1" style={{ color: "var(--text-2)" }}>IVA (%)</label>
-              <Input type="number" step="0.01" min="0" max="100" {...register("taxRate")} />
+              <Input type="number" step="0.01" min="0" max="100" {...register("taxRate", { valueAsNumber: true })} />
             </div>
             <div>
               <label className="block text-xs font-medium mb-1" style={{ color: "var(--text-2)" }}>Descuento (€)</label>
-              <Input type="number" step="0.01" min="0" {...register("discountAmount")} />
+              <Input type="number" step="0.01" min="0" {...register("discountAmount", { valueAsNumber: true })} />
             </div>
           </div>
 
@@ -355,7 +355,7 @@ export function InvoiceForm({ invoice, leads = [], proposals = [] }: InvoiceForm
 
       <div className="flex justify-end gap-3">
         <Button type="button" variant="secondary" onClick={() => router.back()}>Cancelar</Button>
-        <Button type="submit" isLoading={isSubmitting}>
+        <Button type="submit" loading={isSubmitting}>
           {isEditing ? "Guardar cambios" : "Crear factura"}
         </Button>
       </div>

@@ -104,9 +104,9 @@ export async function updateInvoice(id: string, rawData: unknown): Promise<Actio
   const dueDate = new Date(data.dueDate);
   const status = resolveStatus(existing.status, total, existing.paidAmount, dueDate);
 
-  await prisma.$transaction([
-    prisma.invoiceItem.deleteMany({ where: { invoiceId: id } }),
-    prisma.invoice.update({
+  await prisma.$transaction(async (tx) => {
+    await tx.invoiceItem.deleteMany({ where: { invoiceId: id } });
+    await tx.invoice.update({
       where: { id },
       data: {
         companyName: data.companyName,
@@ -138,8 +138,8 @@ export async function updateInvoice(id: string, rawData: unknown): Promise<Actio
           })),
         },
       },
-    }),
-  ]);
+    });
+  });
 
   revalidatePath("/invoices");
   revalidatePath(`/invoices/${id}`);
