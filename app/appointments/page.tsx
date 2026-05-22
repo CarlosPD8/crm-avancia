@@ -6,7 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { Button } from "@/components/ui/Button";
 import { AppointmentFilters } from "@/components/appointments/AppointmentFilters";
-import { AppointmentsTable } from "@/components/appointments/AppointmentsTable";
+import { AppointmentsViewClient } from "@/components/appointments/AppointmentsViewClient";
 import type { AppointmentStatus } from "@/types";
 
 interface AppointmentsPageProps {
@@ -71,7 +71,7 @@ export default async function AppointmentsPage({ searchParams }: AppointmentsPag
       </div>
 
       <AppointmentFilters />
-      <AppointmentsTable appointments={serialized} />
+      <AppointmentsViewClient appointments={serialized} />
     </PageContainer>
   );
 }
