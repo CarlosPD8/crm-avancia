@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useForm, useFieldArray, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -32,9 +32,19 @@ type InvoiceWithRelations = {
   items: { id: string; description: string; quantity: number; unitPrice: number }[];
 };
 
+type LeadOption = {
+  id: string;
+  companyName: string;
+  contactName?: string | null;
+  email?: string | null;
+  phone?: string | null;
+  address?: string | null;
+  taxId?: string | null;
+};
+
 interface InvoiceFormProps {
   invoice?: InvoiceWithRelations;
-  leads?: { id: string; companyName: string }[];
+  leads?: LeadOption[];
   proposals?: { id: string; companyName: string; number?: string }[];
 }
 
@@ -75,7 +85,7 @@ export function InvoiceForm({ invoice, leads = [], proposals = [] }: InvoiceForm
         return d.toISOString().split("T")[0];
       })();
 
-  const { register, control, handleSubmit, setError, formState: { errors, isSubmitting } } =
+  const { register, control, handleSubmit, setError, setValue, formState: { errors, isSubmitting } } =
     useForm<InvoiceSchema>({
       resolver: zodResolver(invoiceSchema),
       defaultValues: {
@@ -105,6 +115,19 @@ export function InvoiceForm({ invoice, leads = [], proposals = [] }: InvoiceForm
   const watchedItems = useWatch({ control, name: "items" }) ?? [];
   const watchedTaxRate = useWatch({ control, name: "taxRate" }) ?? 21;
   const watchedDiscount = useWatch({ control, name: "discountAmount" }) ?? 0;
+  const watchedLeadId = useWatch({ control, name: "leadId" });
+
+  useEffect(() => {
+    if (!watchedLeadId) return;
+    const lead = leads.find((l) => l.id === watchedLeadId);
+    if (!lead) return;
+    if (lead.companyName) setValue("companyName", lead.companyName);
+    if (lead.contactName) setValue("contactName", lead.contactName);
+    if (lead.email) setValue("email", lead.email);
+    if (lead.phone) setValue("phone", lead.phone ?? "");
+    if (lead.address) setValue("address", lead.address ?? "");
+    if (lead.taxId) setValue("taxId", lead.taxId ?? "");
+  }, [watchedLeadId, leads, setValue]);
 
   const subtotal = watchedItems.reduce((s, i) => s + (Number(i?.quantity) || 0) * (Number(i?.unitPrice) || 0), 0);
   const discounted = Math.max(0, subtotal - (Number(watchedDiscount) || 0));
