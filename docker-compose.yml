@@ -67,7 +67,7 @@ services:
       NODE_ENV: "production"
       UPLOAD_DIR: "/app/uploads"
     volumes:
-      - crm_uploads:/app/uploads
+      - /opt/crm-avancia/uploads:/app/uploads
     depends_on:
       - postgres
 
@@ -93,4 +93,3 @@ volumes:
   pgadmin_data:
   caddy_data:
   caddy_config:
-  crm_uploads:

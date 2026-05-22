@@ -56,6 +56,7 @@ model Lead {
   status      LeadStatus @default(NEW)
   notes       String?
   proposals   Proposal[]
+  invoices    Invoice[]
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 }
@@ -72,9 +73,64 @@ model Proposal {
   value       Float?
   notes       String?
   files       ProposalFile[]
+  invoices    Invoice[]
   sentAt      DateTime?
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
+}
+
+model Invoice {
+  id              String          @id @default(cuid())
+  number          String          @unique
+  companyName     String
+  contactName     String
+  email           String
+  phone           String?
+  address         String?
+  taxId           String?
+  leadId          String?
+  lead            Lead?           @relation(fields: [leadId], references: [id])
+  proposalId      String?
+  proposal        Proposal?       @relation(fields: [proposalId], references: [id])
+  subtotal        Float           @default(0)
+  taxRate         Float           @default(21)
+  taxAmount       Float           @default(0)
+  discountAmount  Float           @default(0)
+  total           Float           @default(0)
+  paidAmount      Float           @default(0)
+  status          InvoiceStatus   @default(DRAFT)
+  issueDate       DateTime        @default(now())
+  dueDate         DateTime
+  sentAt          DateTime?
+  isRecurring     Boolean         @default(false)
+  recurringPeriod String?
+  notes           String?
+  items           InvoiceItem[]
+  payments        InvoicePayment[]
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+}
+
+model InvoiceItem {
+  id          String  @id @default(cuid())
+  invoiceId   String
+  invoice     Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  description String
+  quantity    Float   @default(1)
+  unitPrice   Float   @default(0)
+  total       Float   @default(0)
+  position    Int     @default(0)
+}
+
+model InvoicePayment {
+  id        String        @id @default(cuid())
+  invoiceId String
+  invoice   Invoice       @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  amount    Float
+  method    PaymentMethod @default(TRANSFER)
+  date      DateTime
+  notes     String?
+  createdAt DateTime      @default(now())
 }
 
 model ProposalFile {
@@ -135,4 +191,21 @@ enum ProposalStatus {
   NEGOTIATING
   ACCEPTED
   REJECTED
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PARTIAL
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
+enum PaymentMethod {
+  TRANSFER
+  CARD
+  CASH
+  CHEQUE
+  OTHER
 }

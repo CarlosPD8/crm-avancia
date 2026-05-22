@@ -6,7 +6,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard, CalendarDays, Users, Search, FileText,
-  Menu, X, Sun, Moon,
+  Receipt, Menu, X, Sun, Moon,
 } from "lucide-react";
 import { useTheme } from "@/components/ui/ThemeProvider";
 
@@ -15,6 +15,7 @@ const navItems = [
   { href: "/appointments",    label: "Citas",      icon: CalendarDays },
   { href: "/leads",           label: "Leads",      icon: Users },
   { href: "/proposals",       label: "Propuestas", icon: FileText },
+  { href: "/invoices",        label: "Facturas",   icon: Receipt },
   { href: "/prospect-search", label: "Búsqueda",   icon: Search },
 ];
 

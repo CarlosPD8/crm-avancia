@@ -22,6 +22,8 @@ export default async function DashboardPage() {
     pendingLeads,
     upcomingAppointments,
     latestLeads,
+    invoiceAggregates,
+    overdueCount,
   ] = await Promise.all([
     prisma.appointment.count({
       where: { date: { gte: todayStart, lte: todayEnd } },
@@ -44,7 +46,16 @@ export default async function DashboardPage() {
       orderBy: { createdAt: "desc" },
       take: 6,
     }),
+    prisma.invoice.aggregate({
+      where: { status: { not: "CANCELLED" } },
+      _sum: { total: true, paidAmount: true },
+    }),
+    prisma.invoice.count({ where: { status: "OVERDUE" } }),
   ]);
+
+  const totalFacturado = invoiceAggregates._sum.total ?? 0;
+  const totalCobrado = invoiceAggregates._sum.paidAmount ?? 0;
+  const totalPendiente = Math.max(0, totalFacturado - totalCobrado);
 
   return (
     <PageContainer>
@@ -54,6 +65,10 @@ export default async function DashboardPage() {
         weekAppointments={weekAppointments}
         newLeads={newLeads}
         pendingLeads={pendingLeads}
+        totalFacturado={totalFacturado}
+        totalCobrado={totalCobrado}
+        totalPendiente={totalPendiente}
+        overdueInvoices={overdueCount}
       />
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
         <UpcomingAppointments appointments={upcomingAppointments} />
