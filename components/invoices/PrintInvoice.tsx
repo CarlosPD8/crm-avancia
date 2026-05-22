@@ -23,9 +23,12 @@ type Invoice = {
   phone: string | null; address: string | null; taxId: string | null;
   subtotal: number; taxRate: number; taxAmount: number; discountAmount: number;
   total: number; paidAmount: number; status: InvoiceStatus;
-  issueDate: string; dueDate: string; notes: string | null;
-  items: { id: string; description: string; quantity: number; unitPrice: number; total: number }[];
-  payments: { id: string; amount: number; method: PaymentMethod; date: string }[];
+  issueDate: string; dueDate: string; sentAt: string | null;
+  createdAt: string; updatedAt: string; notes: string | null;
+  isRecurring: boolean; recurringPeriod: string | null;
+  leadId: string | null; proposalId: string | null;
+  items: { id: string; description: string; quantity: number; unitPrice: number; total: number; position: number }[];
+  payments: { id: string; amount: number; method: PaymentMethod; date: string; createdAt: string; notes: string | null }[];
 };
 
 export function PrintInvoice({ invoice }: { invoice: Invoice }) {
