@@ -95,11 +95,8 @@ export function Sidebar() {
         {/* Logo */}
         <div className="flex items-center justify-between px-4 pt-5 pb-4">
           <Link href="/dashboard" className="flex items-center gap-3 min-w-0">
-            <div
-              className="h-8 w-8 rounded-lg flex items-center justify-center shrink-0 overflow-hidden"
-              style={{ background: "var(--accent-gradient)", boxShadow: "0 4px 12px rgba(99,102,241,0.4)" }}
-            >
-              <Image src="/logo.png" alt="Avancia" width={20} height={20} />
+            <div className="h-8 w-8 shrink-0 flex items-center justify-center">
+              <Image src="/logo.png" alt="Avancia" width={32} height={32} />
             </div>
             <div className="min-w-0">
               <p className="text-sm font-bold leading-none" style={{ color: "var(--text-1)" }}>Avancia</p>
