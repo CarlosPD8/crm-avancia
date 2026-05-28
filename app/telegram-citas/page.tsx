@@ -4,13 +4,18 @@ import { Bot } from "lucide-react";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { TelegramCitasTable, type TelegramCita } from "@/components/telegram-citas/TelegramCitasTable";
 import { TelegramCitasFilters } from "@/components/telegram-citas/TelegramCitasFilters";
+import { getPrismaTelegram } from "@/lib/prisma-telegram";
 
 async function getTelegramCitas(q?: string, estado?: string, fecha?: string): Promise<TelegramCita[]> {
-  if (!process.env.DATABASE_TELEGRAM_URL) return [];
-
-  const { prismaT } = await import("@/lib/prisma-telegram");
+  const prismaT = getPrismaTelegram();
+  if (!prismaT) return [];
 
   try {
+    const conditions: string[] = ["1=1"];
+    if (q) conditions.push(`(nombre_cliente ILIKE '%${q.replace(/'/g, "''")}%' OR telefono ILIKE '%${q.replace(/'/g, "''")}%')`);
+    if (estado) conditions.push(`estado = '${estado.replace(/'/g, "''")}'`);
+    if (fecha) conditions.push(`fecha = '${fecha.replace(/'/g, "''")}'`);
+
     const rows = await prismaT.$queryRawUnsafe<TelegramCita[]>(`
       SELECT
         id::text,
@@ -22,14 +27,12 @@ async function getTelegramCitas(q?: string, estado?: string, fecha?: string): Pr
         estado,
         chat_id_telegram
       FROM citas
-      WHERE 1=1
-        ${q ? `AND (nombre_cliente ILIKE '%${q.replace(/'/g, "''")}%' OR telefono ILIKE '%${q.replace(/'/g, "''")}%')` : ""}
-        ${estado ? `AND estado = '${estado.replace(/'/g, "''")}'` : ""}
-        ${fecha ? `AND fecha = '${fecha.replace(/'/g, "''")}'` : ""}
+      WHERE ${conditions.join(" AND ")}
       ORDER BY fecha DESC, hora_inicio DESC
     `);
     return rows;
-  } catch {
+  } catch (e) {
+    console.error("[TelegramCitas]", e);
     return [];
   }
 }
@@ -41,25 +44,22 @@ interface Props {
 export default async function TelegramCitasPage({ searchParams }: Props) {
   const { q, estado, fecha } = await searchParams;
   const citas = await getTelegramCitas(q, estado, fecha);
-
   const noConfig = !process.env.DATABASE_TELEGRAM_URL;
 
   return (
     <PageContainer>
-      <div className="flex items-center justify-between gap-4 flex-wrap mb-6">
-        <div className="flex items-center gap-3">
-          <div
-            className="h-9 w-9 rounded-xl flex items-center justify-center"
-            style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", color: "var(--accent)" }}
-          >
-            <Bot className="h-4 w-4" />
-          </div>
-          <div>
-            <h2 className="text-base font-semibold" style={{ color: "var(--text-1)" }}>Citas Telegram</h2>
-            <p className="text-sm" style={{ color: "var(--text-3)" }}>
-              {citas.length} cita{citas.length !== 1 ? "s" : ""} registrada{citas.length !== 1 ? "s" : ""}
-            </p>
-          </div>
+      <div className="flex items-center gap-3 mb-6">
+        <div
+          className="h-9 w-9 rounded-xl flex items-center justify-center"
+          style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", color: "var(--accent)" }}
+        >
+          <Bot className="h-4 w-4" />
+        </div>
+        <div>
+          <h2 className="text-base font-semibold" style={{ color: "var(--text-1)" }}>Citas Telegram</h2>
+          <p className="text-sm" style={{ color: "var(--text-3)" }}>
+            {noConfig ? "Base de datos no configurada" : `${citas.length} cita${citas.length !== 1 ? "s" : ""} registrada${citas.length !== 1 ? "s" : ""}`}
+          </p>
         </div>
       </div>
 
@@ -71,7 +71,7 @@ export default async function TelegramCitasPage({ searchParams }: Props) {
           <Bot className="h-10 w-10 mx-auto mb-3" style={{ color: "var(--text-3)" }} />
           <p className="font-medium mb-1" style={{ color: "var(--text-1)" }}>Base de datos no configurada</p>
           <p className="text-sm" style={{ color: "var(--text-3)" }}>
-            Añade la variable <code className="font-mono text-xs px-1 py-0.5 rounded" style={{ background: "var(--bg-elevated)" }}>DATABASE_TELEGRAM_URL</code> al entorno con la conexión a la base de datos de Telegram.
+            Añade <code className="font-mono text-xs px-1 py-0.5 rounded" style={{ background: "var(--bg-elevated)" }}>DATABASE_TELEGRAM_URL</code> al entorno del contenedor.
           </p>
         </div>
       ) : (
