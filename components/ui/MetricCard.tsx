@@ -11,27 +11,28 @@ interface MetricCardProps {
   color?: "blue" | "emerald" | "amber" | "red" | "indigo" | "violet";
   className?: string;
   animationDelay?: number;
+  trend?: { value: number; label: string };
 }
 
-const colorMap: Record<string, { color: string; light: string; muted: string; gradient: string }> = {
-  blue:    { color: "var(--info)",    light: "var(--info-light)",    muted: "var(--info-muted)",    gradient: "rgba(37,99,235,0.7)"   },
-  indigo:  { color: "var(--accent)",  light: "var(--accent-light)",  muted: "var(--accent-muted)",  gradient: "rgba(201,149,10,0.7)"  },
-  emerald: { color: "var(--success)", light: "var(--success-light)", muted: "var(--success-muted)", gradient: "rgba(22,163,74,0.7)"   },
-  amber:   { color: "var(--warning)", light: "var(--warning-light)", muted: "var(--warning-muted)", gradient: "rgba(217,119,6,0.7)"   },
-  red:     { color: "var(--danger)",  light: "var(--danger-light)",  muted: "var(--danger-muted)",  gradient: "rgba(220,38,38,0.7)"   },
-  violet:  { color: "var(--violet)",  light: "var(--violet-muted)",  muted: "var(--violet-muted)",  gradient: "rgba(124,58,237,0.7)"  },
+const colorMap: Record<string, { color: string; muted: string; gradient: string }> = {
+  blue:    { color: "var(--info)",    muted: "var(--info-muted)",    gradient: "linear-gradient(135deg, #3b82f6, #60a5fa)" },
+  indigo:  { color: "var(--accent)",  muted: "var(--accent-muted)",  gradient: "var(--accent-gradient)" },
+  emerald: { color: "var(--success)", muted: "var(--success-muted)", gradient: "linear-gradient(135deg, #10b981, #34d399)" },
+  amber:   { color: "var(--warning)", muted: "var(--warning-muted)", gradient: "linear-gradient(135deg, #f59e0b, #fbbf24)" },
+  red:     { color: "var(--danger)",  muted: "var(--danger-muted)",  gradient: "linear-gradient(135deg, #ef4444, #f87171)" },
+  violet:  { color: "var(--violet)",  muted: "var(--violet-muted)",  gradient: "linear-gradient(135deg, #8b5cf6, #a78bfa)" },
 };
 
 export function MetricCard({
-  title, value, icon: Icon, description, href, color = "indigo", className, animationDelay = 0,
+  title, value, icon: Icon, description, href, color = "indigo", className, animationDelay = 0, trend,
 }: MetricCardProps) {
   const c = colorMap[color] ?? colorMap.indigo;
 
   const content = (
     <div
       className={cn(
-        "rounded-2xl overflow-hidden flex flex-col justify-between gap-5 transition-all duration-200 animate-fade-in-up",
-        href && "hover:-translate-y-0.5 hover:shadow-lg cursor-pointer",
+        "rounded-2xl p-5 flex flex-col gap-3 animate-fade-in-up relative overflow-hidden transition-all duration-200",
+        href && "hover:-translate-y-0.5 cursor-pointer",
         className,
       )}
       style={{
@@ -39,43 +40,55 @@ export function MetricCard({
         border: "1px solid var(--border)",
         boxShadow: "var(--shadow-card)",
         animationDelay: `${animationDelay}ms`,
-        position: "relative",
-        paddingTop: "4px",
       }}
     >
-      {/* Top color strip */}
+      {/* Subtle gradient orb in corner */}
       <div
         style={{
           position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          height: "3px",
-          background: `linear-gradient(90deg, ${c.color}, ${c.gradient})`,
-          opacity: 0.8,
+          top: -20,
+          right: -20,
+          width: 80,
+          height: 80,
+          borderRadius: "50%",
+          background: c.gradient,
+          opacity: 0.08,
+          filter: "blur(20px)",
+          pointerEvents: "none",
         }}
       />
 
-      <div className="px-5 pt-4 flex items-start justify-between gap-3">
-        {/* Icon */}
+      {/* Top row: icon + trend */}
+      <div className="flex items-start justify-between">
         <div
           className="h-9 w-9 rounded-xl flex items-center justify-center shrink-0"
-          style={{ background: c.muted }}
+          style={{ background: c.gradient, boxShadow: `0 4px 12px ${c.muted}` }}
         >
-          <Icon className="h-4.5 w-4.5" strokeWidth={2} style={{ color: c.color }} />
+          <Icon className="h-4.5 w-4.5 text-white" strokeWidth={2} />
         </div>
+        {trend && (
+          <span
+            className="text-xs font-bold px-2 py-0.5 rounded-full"
+            style={{
+              color: trend.value >= 0 ? "var(--success)" : "var(--danger)",
+              background: trend.value >= 0 ? "var(--success-muted)" : "var(--danger-muted)",
+            }}
+          >
+            {trend.value >= 0 ? "+" : ""}{trend.value}% {trend.label}
+          </span>
+        )}
+      </div>
 
-        {/* Value */}
-        <p
-          className="text-2xl font-bold tabular-nums tracking-tight leading-none"
-          style={{ color: "var(--text-1)" }}
-        >
+      {/* Value */}
+      <div>
+        <p className="text-3xl font-bold tabular-nums tracking-tight leading-none" style={{ color: "var(--text-1)" }}>
           {value}
         </p>
       </div>
 
-      <div className="px-5 pb-4">
-        <p className="text-xs font-bold uppercase tracking-wider" style={{ color: c.color }}>
+      {/* Label */}
+      <div>
+        <p className="text-xs font-bold uppercase tracking-widest" style={{ color: "var(--text-3)" }}>
           {title}
         </p>
         {description && (

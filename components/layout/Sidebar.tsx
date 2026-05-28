@@ -32,32 +32,31 @@ function NavItem({
     <Link
       href={href}
       onClick={onClick}
-      className="group flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-150 relative"
+      className="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-150 relative group"
       style={
         isActive
           ? {
               background: "var(--nav-active-bg)",
               color: "var(--nav-active-text)",
-              boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
+              boxShadow: "0 4px 14px rgba(0,0,0,0.25)",
             }
           : { color: "var(--text-2)" }
       }
       onMouseEnter={(e) => {
-        if (!isActive) (e.currentTarget as HTMLElement).style.background = "var(--bg-elevated)";
-        if (!isActive) (e.currentTarget as HTMLElement).style.color = "var(--text-1)";
+        if (!isActive) {
+          (e.currentTarget as HTMLElement).style.background = "var(--bg-elevated)";
+          (e.currentTarget as HTMLElement).style.color = "var(--text-1)";
+        }
       }}
       onMouseLeave={(e) => {
-        if (!isActive) { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.color = "var(--text-2)"; }
+        if (!isActive) {
+          (e.currentTarget as HTMLElement).style.background = "transparent";
+          (e.currentTarget as HTMLElement).style.color = "var(--text-2)";
+        }
       }}
     >
       <Icon className="h-4 w-4 shrink-0" strokeWidth={isActive ? 2.2 : 1.8} />
-      <span className="text-sm font-medium">{label}</span>
-      {isActive && (
-        <span
-          className="absolute right-3 h-1.5 w-1.5 rounded-full"
-          style={{ background: "var(--nav-active-text)", opacity: 0.6 }}
-        />
-      )}
+      <span className="text-sm font-semibold">{label}</span>
     </Link>
   );
 }
@@ -68,30 +67,22 @@ export function Sidebar() {
 
   return (
     <>
-      {/* Mobile toggle */}
       <button
         onClick={() => setMobileOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-40 p-2 rounded-xl transition-colors"
-        style={{
-          background: "var(--bg-card)",
-          border: "1px solid var(--border)",
-          color: "var(--text-2)",
-          boxShadow: "var(--shadow-sm)",
-        }}
+        className="lg:hidden fixed top-4 left-4 z-40 p-2 rounded-xl"
+        style={{ background: "var(--bg-card)", border: "1px solid var(--border)", color: "var(--text-2)", boxShadow: "var(--shadow-sm)" }}
       >
         <Menu className="h-4 w-4" />
       </button>
 
-      {/* Mobile overlay */}
       {mobileOpen && (
         <div
           className="fixed inset-0 z-40 lg:hidden"
-          style={{ background: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)" }}
+          style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(6px)" }}
           onClick={() => setMobileOpen(false)}
         />
       )}
 
-      {/* Sidebar */}
       <aside
         className={[
           "fixed inset-y-0 left-0 z-50 w-56 flex flex-col",
@@ -99,65 +90,44 @@ export function Sidebar() {
           "lg:translate-x-0 lg:static lg:z-auto",
           mobileOpen ? "translate-x-0" : "-translate-x-full",
         ].join(" ")}
-        style={{
-          background: "var(--bg-sidebar)",
-          borderRight: "1px solid var(--border)",
-        }}
+        style={{ background: "var(--bg-sidebar)", borderRight: "1px solid var(--border)" }}
       >
         {/* Logo */}
         <div className="flex items-center justify-between px-4 pt-5 pb-4">
           <Link href="/dashboard" className="flex items-center gap-3 min-w-0">
             <div
               className="h-8 w-8 rounded-lg flex items-center justify-center shrink-0 overflow-hidden"
-              style={{ background: "var(--nav-active-bg)" }}
+              style={{ background: "var(--accent-gradient)", boxShadow: "0 4px 12px rgba(99,102,241,0.4)" }}
             >
-              <Image src="/logo.png" alt="Avancia" width={22} height={22} />
+              <Image src="/logo.png" alt="Avancia" width={20} height={20} />
             </div>
             <div className="min-w-0">
-              <p className="text-sm font-bold leading-none truncate" style={{ color: "var(--text-1)" }}>
-                Avancia
-              </p>
-              <p className="text-[10px] font-medium leading-none mt-1" style={{ color: "var(--text-3)" }}>
-                CRM Panel
-              </p>
+              <p className="text-sm font-bold leading-none" style={{ color: "var(--text-1)" }}>Avancia</p>
+              <p className="text-[10px] font-medium leading-none mt-1" style={{ color: "var(--text-3)" }}>CRM Panel</p>
             </div>
           </Link>
-          <button
-            onClick={() => setMobileOpen(false)}
-            className="lg:hidden p-1.5 rounded-lg"
-            style={{ color: "var(--text-3)" }}
-          >
+          <button onClick={() => setMobileOpen(false)} className="lg:hidden p-1.5 rounded-lg" style={{ color: "var(--text-3)" }}>
             <X className="h-4 w-4" />
           </button>
         </div>
 
-        {/* Divider */}
         <div className="mx-4 mb-3" style={{ height: "1px", background: "var(--border)" }} />
 
-        {/* Nav */}
         <nav className="flex-1 px-3 overflow-y-auto space-y-0.5">
-          <p
-            className="px-3 mb-2 text-[10px] font-bold uppercase tracking-widest"
-            style={{ color: "var(--text-3)" }}
-          >
+          <p className="px-3 mb-2 text-[10px] font-bold uppercase tracking-widest" style={{ color: "var(--text-3)" }}>
             Menú
           </p>
           {navItems.map((item) => (
-            <NavItem
-              key={item.href}
-              {...item}
-              onClick={() => setMobileOpen(false)}
-            />
+            <NavItem key={item.href} {...item} onClick={() => setMobileOpen(false)} />
           ))}
         </nav>
 
-        {/* Footer */}
         <div className="px-3 py-4" style={{ borderTop: "1px solid var(--border)" }}>
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2.5 min-w-0">
               <div
                 className="h-7 w-7 rounded-lg flex items-center justify-center text-[11px] font-bold shrink-0"
-                style={{ background: "var(--nav-active-bg)", color: "var(--nav-active-text)" }}
+                style={{ background: "var(--accent-gradient)", color: "#fff" }}
               >
                 A
               </div>
@@ -169,11 +139,7 @@ export function Sidebar() {
             <button
               onClick={toggle}
               className="p-1.5 rounded-lg transition-all duration-150 shrink-0"
-              style={{
-                background: "var(--bg-elevated)",
-                border: "1px solid var(--border)",
-                color: "var(--text-2)",
-              }}
+              style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", color: "var(--text-2)" }}
               title={theme === "dark" ? "Modo claro" : "Modo oscuro"}
             >
               {theme === "dark" ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
