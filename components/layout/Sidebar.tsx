@@ -1,14 +1,14 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard, CalendarDays, Users, Search, FileText,
-  Receipt, Bot, Menu, X, Sun, Moon,
+  Receipt, Bot, X, Sun, Moon,
 } from "lucide-react";
 import { useTheme } from "@/components/ui/ThemeProvider";
+import { useSidebar } from "./SidebarContext";
 
 const navItems = [
   { href: "/dashboard",       label: "Dashboard",  icon: LayoutDashboard },
@@ -32,14 +32,10 @@ function NavItem({
     <Link
       href={href}
       onClick={onClick}
-      className="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-150 relative group"
+      className="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-150"
       style={
         isActive
-          ? {
-              background: "var(--nav-active-bg)",
-              color: "var(--nav-active-text)",
-              boxShadow: "0 4px 14px rgba(0,0,0,0.25)",
-            }
+          ? { background: "var(--nav-active-bg)", color: "var(--nav-active-text)", boxShadow: "0 4px 14px rgba(0,0,0,0.25)" }
           : { color: "var(--text-2)" }
       }
       onMouseEnter={(e) => {
@@ -62,24 +58,17 @@ function NavItem({
 }
 
 export function Sidebar() {
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const { open, setOpen } = useSidebar();
   const { theme, toggle } = useTheme();
 
   return (
     <>
-      <button
-        onClick={() => setMobileOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-40 p-2 rounded-xl"
-        style={{ background: "var(--bg-card)", border: "1px solid var(--border)", color: "var(--text-2)", boxShadow: "var(--shadow-sm)" }}
-      >
-        <Menu className="h-4 w-4" />
-      </button>
-
-      {mobileOpen && (
+      {/* Mobile overlay */}
+      {open && (
         <div
           className="fixed inset-0 z-40 lg:hidden"
           style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(6px)" }}
-          onClick={() => setMobileOpen(false)}
+          onClick={() => setOpen(false)}
         />
       )}
 
@@ -88,13 +77,13 @@ export function Sidebar() {
           "fixed inset-y-0 left-0 z-50 w-56 flex flex-col",
           "transform transition-transform duration-200 ease-out",
           "lg:translate-x-0 lg:static lg:z-auto",
-          mobileOpen ? "translate-x-0" : "-translate-x-full",
+          open ? "translate-x-0" : "-translate-x-full",
         ].join(" ")}
         style={{ background: "var(--bg-sidebar)", borderRight: "1px solid var(--border)" }}
       >
         {/* Logo */}
         <div className="flex items-center justify-between px-4 pt-5 pb-4">
-          <Link href="/dashboard" className="flex items-center gap-3 min-w-0">
+          <Link href="/dashboard" className="flex items-center gap-3 min-w-0" onClick={() => setOpen(false)}>
             <div className="h-8 w-8 shrink-0 flex items-center justify-center">
               <Image src="/logo.png" alt="Avancia" width={32} height={32} />
             </div>
@@ -103,7 +92,11 @@ export function Sidebar() {
               <p className="text-[10px] font-medium leading-none mt-1" style={{ color: "var(--text-3)" }}>CRM Panel</p>
             </div>
           </Link>
-          <button onClick={() => setMobileOpen(false)} className="lg:hidden p-1.5 rounded-lg" style={{ color: "var(--text-3)" }}>
+          <button
+            onClick={() => setOpen(false)}
+            className="lg:hidden p-1.5 rounded-lg"
+            style={{ color: "var(--text-3)" }}
+          >
             <X className="h-4 w-4" />
           </button>
         </div>
@@ -115,7 +108,7 @@ export function Sidebar() {
             Menú
           </p>
           {navItems.map((item) => (
-            <NavItem key={item.href} {...item} onClick={() => setMobileOpen(false)} />
+            <NavItem key={item.href} {...item} onClick={() => setOpen(false)} />
           ))}
         </nav>
 
@@ -137,7 +130,6 @@ export function Sidebar() {
               onClick={toggle}
               className="p-1.5 rounded-lg transition-all duration-150 shrink-0"
               style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", color: "var(--text-2)" }}
-              title={theme === "dark" ? "Modo claro" : "Modo oscuro"}
             >
               {theme === "dark" ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
             </button>

@@ -23,13 +23,13 @@ export function MetricsGrid({
 }: MetricsGridProps) {
   return (
     <div className="space-y-3">
-      <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-2 sm:gap-3 xl:grid-cols-4">
         <MetricCard title="Citas hoy"          value={todayAppointments} icon={CalendarDays} description="Programadas para hoy"   href="/appointments"          color="indigo"  animationDelay={0}   />
         <MetricCard title="Citas esta semana"  value={weekAppointments}  icon={Clock}        description="Total de la semana"     href="/appointments"          color="blue"    animationDelay={60}  />
         <MetricCard title="Leads nuevos"       value={newLeads}          icon={TrendingUp}   description="Sin contactar aún"      href="/leads"                 color="emerald" animationDelay={120} />
         <MetricCard title="Leads pendientes"   value={pendingLeads}      icon={Users}        description="Nuevo o contactado"     href="/leads"                 color="amber"   animationDelay={180} />
       </div>
-      <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-2 sm:gap-3 xl:grid-cols-4">
         <MetricCard title="Total facturado"    value={formatEur(totalFacturado)}  icon={Receipt}       description="Facturas no canceladas" href="/invoices"              color="indigo"  animationDelay={240} />
         <MetricCard title="Total cobrado"      value={formatEur(totalCobrado)}    icon={CheckCircle2}  description="Pagos registrados"      href="/invoices?status=PAID"  color="emerald" animationDelay={300} />
         <MetricCard title="Pendiente de cobro" value={formatEur(totalPendiente)}  icon={Banknote}      description="Importe por cobrar"     href="/invoices?status=SENT"  color="amber"   animationDelay={360} />

@@ -1,16 +1,17 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { ChevronRight } from "lucide-react";
+import { Menu } from "lucide-react";
+import { useSidebar } from "./SidebarContext";
 
 const pageTitles: Record<string, { title: string; description: string }> = {
-  "/dashboard":       { title: "Dashboard",        description: "Vista general del negocio" },
-  "/appointments":    { title: "Citas",             description: "Gestión de reuniones comerciales" },
-  "/telegram-citas":  { title: "Citas Telegram",    description: "Reservas del bot automático" },
-  "/leads":           { title: "Leads",             description: "Pipeline de clientes potenciales" },
-  "/proposals":       { title: "Propuestas",        description: "Gestión de presupuestos" },
-  "/invoices":        { title: "Facturas",          description: "Control de facturación" },
-  "/prospect-search": { title: "Buscar Clientes",   description: "Prospección de nuevos clientes" },
+  "/dashboard":       { title: "Dashboard",       description: "Vista general" },
+  "/appointments":    { title: "Citas",            description: "Reuniones comerciales" },
+  "/telegram-citas":  { title: "Citas Telegram",   description: "Bot automático" },
+  "/leads":           { title: "Leads",            description: "Pipeline comercial" },
+  "/proposals":       { title: "Propuestas",       description: "Presupuestos" },
+  "/invoices":        { title: "Facturas",         description: "Facturación" },
+  "/prospect-search": { title: "Buscar Clientes",  description: "Prospección" },
 };
 
 function getPageInfo(pathname: string) {
@@ -22,11 +23,12 @@ function getPageInfo(pathname: string) {
 
 export function Header() {
   const pathname = usePathname();
+  const { setOpen } = useSidebar();
   const { title, description } = getPageInfo(pathname);
 
   return (
     <header
-      className="sticky top-0 z-30 flex items-center px-6 gap-4"
+      className="sticky top-0 z-30 flex items-center gap-3 px-4 sm:px-6"
       style={{
         height: "56px",
         background: "color-mix(in srgb, var(--bg-sidebar) 92%, transparent)",
@@ -35,16 +37,22 @@ export function Header() {
         borderBottom: "1px solid var(--border)",
       }}
     >
-      <div className="flex items-center gap-2 min-w-0">
-        <nav className="flex items-center gap-1.5 text-xs font-medium shrink-0">
-          <span style={{ color: "var(--text-3)" }}>Inicio</span>
-          <ChevronRight className="h-3 w-3 shrink-0" style={{ color: "var(--text-3)" }} />
-          <span className="font-semibold" style={{ color: "var(--text-1)" }}>{title}</span>
-        </nav>
+      {/* Mobile hamburger — only on small screens */}
+      <button
+        onClick={() => setOpen(true)}
+        className="lg:hidden p-2 -ml-1 rounded-xl shrink-0 transition-colors"
+        style={{ color: "var(--text-2)", background: "var(--bg-elevated)", border: "1px solid var(--border)" }}
+        aria-label="Abrir menú"
+      >
+        <Menu className="h-4 w-4" />
+      </button>
+
+      <div className="flex items-center gap-2 min-w-0 flex-1">
+        <span className="font-bold text-sm truncate" style={{ color: "var(--text-1)" }}>{title}</span>
         {description && (
           <>
-            <span style={{ color: "var(--border-strong)" }} className="text-xs hidden sm:inline">·</span>
-            <span className="text-xs hidden sm:inline truncate" style={{ color: "var(--text-3)" }}>{description}</span>
+            <span className="hidden sm:inline" style={{ color: "var(--border-strong)" }}>·</span>
+            <span className="hidden sm:inline text-xs truncate" style={{ color: "var(--text-3)" }}>{description}</span>
           </>
         )}
       </div>

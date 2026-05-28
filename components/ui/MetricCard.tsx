@@ -31,7 +31,7 @@ export function MetricCard({
   const content = (
     <div
       className={cn(
-        "rounded-2xl p-5 flex flex-col gap-3 animate-fade-in-up relative overflow-hidden transition-all duration-200",
+        "rounded-2xl p-4 sm:p-5 flex flex-col gap-3 animate-fade-in-up relative overflow-hidden transition-all duration-200",
         href && "hover:-translate-y-0.5 cursor-pointer",
         className,
       )}
@@ -81,7 +81,7 @@ export function MetricCard({
 
       {/* Value */}
       <div>
-        <p className="text-3xl font-bold tabular-nums tracking-tight leading-none" style={{ color: "var(--text-1)" }}>
+        <p className="text-2xl sm:text-3xl font-bold tabular-nums tracking-tight leading-none" style={{ color: "var(--text-1)" }}>
           {value}
         </p>
       </div>

@@ -5,6 +5,7 @@ import "./globals.css";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Header } from "@/components/layout/Header";
 import { ThemeProvider } from "@/components/ui/ThemeProvider";
+import { SidebarProvider } from "@/components/layout/SidebarContext";
 
 const jakartaSans = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
@@ -16,6 +17,12 @@ export const metadata: Metadata = {
   title: "CRM Avancia",
   description: "Panel de gestión comercial — Avancia Tech",
   icons: { icon: "/logo.png", apple: "/logo.png" },
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
 };
 
 export default async function RootLayout({
@@ -41,13 +48,15 @@ export default async function RootLayout({
           children
         ) : (
           <ThemeProvider>
-            <div className="flex h-full">
-              <Sidebar />
-              <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
-                <Header />
-                {children}
+            <SidebarProvider>
+              <div className="flex h-full">
+                <Sidebar />
+                <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
+                  <Header />
+                  {children}
+                </div>
               </div>
-            </div>
+            </SidebarProvider>
           </ThemeProvider>
         )}
       </body>

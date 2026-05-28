@@ -130,14 +130,14 @@ export default async function DashboardPage() {
       />
 
       {/* Charts */}
-      <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
         <AppointmentsBarChart data={weekChartData} />
         <RevenueAreaChart data={revenueChartData} />
         <LeadsFunnelChart data={leadsChartData} />
       </div>
 
       {/* Lists */}
-      <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <UpcomingAppointments appointments={upcomingAppointments} />
         <LatestLeads leads={latestLeads} />
       </div>
