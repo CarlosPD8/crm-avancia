@@ -60,19 +60,19 @@ export function DataTable<T>({
 
   return (
     <div
-      className={cn("rounded-2xl overflow-hidden", className)}
+      className={cn("rounded-2xl overflow-hidden animate-fade-in", className)}
       style={{ background: "var(--bg-card)", border: "1px solid var(--border)", boxShadow: "var(--shadow-card)" }}
     >
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr style={{ borderBottom: "1px solid var(--border)", background: "var(--bg-elevated)" }}>
+            <tr style={{ borderBottom: "2px solid var(--border)", background: "var(--bg-elevated)" }}>
               {columns.map((col) => (
                 <th
                   key={col.key}
                   className={cn(
-                    "px-5 py-3.5 text-left text-[11px] font-semibold uppercase tracking-wider whitespace-nowrap",
-                    col.sortable && "cursor-pointer select-none",
+                    "px-5 py-3 text-left text-[10px] font-bold uppercase tracking-widest whitespace-nowrap select-none",
+                    col.sortable && "cursor-pointer",
                     col.headerClassName,
                   )}
                   style={{ color: "var(--text-3)" }}
@@ -81,17 +81,19 @@ export function DataTable<T>({
                   <div className="flex items-center gap-1.5">
                     {col.label}
                     {col.sortable && (
-                      sortKey === col.key
-                        ? sortDir === "asc"
-                          ? <ChevronUp className="h-3.5 w-3.5" style={{ color: "var(--accent)" }} />
-                          : <ChevronDown className="h-3.5 w-3.5" style={{ color: "var(--accent)" }} />
-                        : <ChevronsUpDown className="h-3.5 w-3.5" style={{ color: "var(--border-strong)" }} />
+                      <span style={{ opacity: sortKey === col.key ? 1 : 0.4 }}>
+                        {sortKey === col.key
+                          ? sortDir === "asc"
+                            ? <ChevronUp className="h-3 w-3" style={{ color: "var(--accent)" }} />
+                            : <ChevronDown className="h-3 w-3" style={{ color: "var(--accent)" }} />
+                          : <ChevronsUpDown className="h-3 w-3" />}
+                      </span>
                     )}
                   </div>
                 </th>
               ))}
               {actions && (
-                <th className="px-5 py-3.5 text-right text-[11px] font-semibold uppercase tracking-wider" style={{ color: "var(--text-3)" }}>
+                <th className="px-5 py-3 text-right text-[10px] font-bold uppercase tracking-widest" style={{ color: "var(--text-3)" }}>
                   Acciones
                 </th>
               )}
@@ -116,18 +118,26 @@ export function DataTable<T>({
                   key={String(getField(row, keyField) ?? i)}
                   onClick={() => onRowClick?.(row)}
                   onDoubleClick={() => onRowDoubleClick?.(row)}
-                  className={cn("transition-colors duration-100", isInteractive && "cursor-pointer")}
+                  className={cn("transition-all duration-100", isInteractive && "cursor-pointer")}
                   style={{ borderTop: "1px solid var(--border)" }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--bg-elevated)"; }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}
+                  onMouseEnter={(e) => {
+                    const el = e.currentTarget as HTMLElement;
+                    el.style.background = "var(--bg-elevated)";
+                    if (isInteractive) el.style.paddingLeft = "2px";
+                  }}
+                  onMouseLeave={(e) => {
+                    const el = e.currentTarget as HTMLElement;
+                    el.style.background = "transparent";
+                    el.style.paddingLeft = "0";
+                  }}
                 >
                   {columns.map((col) => (
-                    <td key={col.key} className={cn("px-5 py-4 whitespace-nowrap", col.className)} style={{ color: "var(--text-2)" }}>
+                    <td key={col.key} className={cn("px-5 py-3.5 whitespace-nowrap", col.className)} style={{ color: "var(--text-2)" }}>
                       {col.render ? col.render(getField(row, col.key), row) : String(getField(row, col.key) ?? "—")}
                     </td>
                   ))}
                   {actions && (
-                    <td className="px-5 py-4 text-right">
+                    <td className="px-5 py-3.5 text-right">
                       <div onClick={(e) => e.stopPropagation()} onDoubleClick={(e) => e.stopPropagation()} className="flex items-center justify-end gap-1.5">
                         {actions(row)}
                       </div>
@@ -140,8 +150,11 @@ export function DataTable<T>({
         </table>
       </div>
       {!isLoading && sorted.length > 0 && (
-        <div className="px-5 py-3.5" style={{ borderTop: "1px solid var(--border)" }}>
-          <p className="text-xs" style={{ color: "var(--text-3)" }}>
+        <div
+          className="px-5 py-2.5 flex items-center justify-between"
+          style={{ borderTop: "1px solid var(--border)", background: "var(--bg-elevated)" }}
+        >
+          <p className="text-[11px] font-medium" style={{ color: "var(--text-3)" }}>
             {sorted.length} {sorted.length === 1 ? "resultado" : "resultados"}
           </p>
         </div>

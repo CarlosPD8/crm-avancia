@@ -22,77 +22,18 @@ export function MetricsGrid({
   totalFacturado, totalCobrado, totalPendiente, overdueInvoices,
 }: MetricsGridProps) {
   return (
-    <div className="space-y-4">
-      {/* Citas y leads */}
-      <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
-        <MetricCard
-          title="Citas hoy"
-          value={todayAppointments}
-          icon={CalendarDays}
-          description="Programadas para hoy"
-          href="/appointments"
-          color="indigo"
-        />
-        <MetricCard
-          title="Citas esta semana"
-          value={weekAppointments}
-          icon={Clock}
-          description="Total de la semana"
-          href="/appointments"
-          color="blue"
-        />
-        <MetricCard
-          title="Leads nuevos"
-          value={newLeads}
-          icon={TrendingUp}
-          description="Sin contactar aún"
-          href="/leads"
-          color="emerald"
-        />
-        <MetricCard
-          title="Leads pendientes"
-          value={pendingLeads}
-          icon={Users}
-          description="Nuevo o contactado"
-          href="/leads"
-          color="amber"
-        />
+    <div className="space-y-3">
+      <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
+        <MetricCard title="Citas hoy"          value={todayAppointments} icon={CalendarDays} description="Programadas para hoy"   href="/appointments"          color="indigo"  animationDelay={0}   />
+        <MetricCard title="Citas esta semana"  value={weekAppointments}  icon={Clock}        description="Total de la semana"     href="/appointments"          color="blue"    animationDelay={60}  />
+        <MetricCard title="Leads nuevos"       value={newLeads}          icon={TrendingUp}   description="Sin contactar aún"      href="/leads"                 color="emerald" animationDelay={120} />
+        <MetricCard title="Leads pendientes"   value={pendingLeads}      icon={Users}        description="Nuevo o contactado"     href="/leads"                 color="amber"   animationDelay={180} />
       </div>
-
-      {/* Facturación */}
-      <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
-        <MetricCard
-          title="Total facturado"
-          value={formatEur(totalFacturado)}
-          icon={Receipt}
-          description="Facturas no canceladas"
-          href="/invoices"
-          color="indigo"
-        />
-        <MetricCard
-          title="Total cobrado"
-          value={formatEur(totalCobrado)}
-          icon={CheckCircle2}
-          description="Pagos registrados"
-          href="/invoices?status=PAID"
-          color="emerald"
-        />
-        <MetricCard
-          title="Pendiente de cobro"
-          value={formatEur(totalPendiente)}
-          icon={Banknote}
-          description="Importe por cobrar"
-          href="/invoices?status=SENT"
-          color="amber"
-        />
-        <MetricCard
-          title="Facturas vencidas"
-          value={overdueInvoices}
-          icon={AlertCircle}
-          description="Requieren atención"
-          href="/invoices?status=OVERDUE"
-          color="red"
-        />
+      <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
+        <MetricCard title="Total facturado"    value={formatEur(totalFacturado)}  icon={Receipt}       description="Facturas no canceladas" href="/invoices"              color="indigo"  animationDelay={240} />
+        <MetricCard title="Total cobrado"      value={formatEur(totalCobrado)}    icon={CheckCircle2}  description="Pagos registrados"      href="/invoices?status=PAID"  color="emerald" animationDelay={300} />
+        <MetricCard title="Pendiente de cobro" value={formatEur(totalPendiente)}  icon={Banknote}      description="Importe por cobrar"     href="/invoices?status=SENT"  color="amber"   animationDelay={360} />
+        <MetricCard title="Facturas vencidas"  value={overdueInvoices}            icon={AlertCircle}   description="Requieren atención"     href="/invoices?status=OVERDUE" color="red"   animationDelay={420} />
       </div>
     </div>
   );

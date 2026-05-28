@@ -20,7 +20,7 @@ const navItems = [
   { href: "/prospect-search", label: "Búsqueda",   icon: Search },
 ];
 
-function GridNavItem({
+function NavItem({
   href, label, icon: Icon, onClick,
 }: {
   href: string; label: string; icon: typeof LayoutDashboard; onClick?: () => void;
@@ -32,21 +32,32 @@ function GridNavItem({
     <Link
       href={href}
       onClick={onClick}
-      className="flex flex-col items-center justify-center gap-2 py-4 px-2 rounded-xl transition-all duration-150 text-center"
+      className="group flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-150 relative"
       style={
         isActive
-          ? { background: "var(--nav-active-bg)", color: "var(--nav-active-text)" }
+          ? {
+              background: "var(--nav-active-bg)",
+              color: "var(--nav-active-text)",
+              boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
+            }
           : { color: "var(--text-2)" }
       }
       onMouseEnter={(e) => {
         if (!isActive) (e.currentTarget as HTMLElement).style.background = "var(--bg-elevated)";
+        if (!isActive) (e.currentTarget as HTMLElement).style.color = "var(--text-1)";
       }}
       onMouseLeave={(e) => {
-        if (!isActive) (e.currentTarget as HTMLElement).style.background = "transparent";
+        if (!isActive) { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.color = "var(--text-2)"; }
       }}
     >
-      <Icon className="h-5 w-5" strokeWidth={isActive ? 2.2 : 1.75} />
-      <span className="text-[11px] font-semibold leading-tight">{label}</span>
+      <Icon className="h-4 w-4 shrink-0" strokeWidth={isActive ? 2.2 : 1.8} />
+      <span className="text-sm font-medium">{label}</span>
+      {isActive && (
+        <span
+          className="absolute right-3 h-1.5 w-1.5 rounded-full"
+          style={{ background: "var(--nav-active-text)", opacity: 0.6 }}
+        />
+      )}
     </Link>
   );
 }
@@ -83,7 +94,7 @@ export function Sidebar() {
       {/* Sidebar */}
       <aside
         className={[
-          "fixed inset-y-0 left-0 z-50 w-60 flex flex-col",
+          "fixed inset-y-0 left-0 z-50 w-56 flex flex-col",
           "transform transition-transform duration-200 ease-out",
           "lg:translate-x-0 lg:static lg:z-auto",
           mobileOpen ? "translate-x-0" : "-translate-x-full",
@@ -94,19 +105,19 @@ export function Sidebar() {
         }}
       >
         {/* Logo */}
-        <div className="flex items-center justify-between px-5 pt-6 pb-5">
-          <Link href="/dashboard" className="flex items-center gap-3">
+        <div className="flex items-center justify-between px-4 pt-5 pb-4">
+          <Link href="/dashboard" className="flex items-center gap-3 min-w-0">
             <div
-              className="h-9 w-9 rounded-xl flex items-center justify-center shrink-0 overflow-hidden"
+              className="h-8 w-8 rounded-lg flex items-center justify-center shrink-0 overflow-hidden"
               style={{ background: "var(--nav-active-bg)" }}
             >
-              <Image src="/logo.png" alt="Avancia" width={26} height={26} />
+              <Image src="/logo.png" alt="Avancia" width={22} height={22} />
             </div>
-            <div>
-              <p className="text-sm font-bold leading-none" style={{ color: "var(--text-1)" }}>
+            <div className="min-w-0">
+              <p className="text-sm font-bold leading-none truncate" style={{ color: "var(--text-1)" }}>
                 Avancia
               </p>
-              <p className="text-[11px] font-semibold leading-none mt-1" style={{ color: "var(--text-3)" }}>
+              <p className="text-[10px] font-medium leading-none mt-1" style={{ color: "var(--text-3)" }}>
                 CRM Panel
               </p>
             </div>
@@ -121,49 +132,43 @@ export function Sidebar() {
         </div>
 
         {/* Divider */}
-        <div className="mx-5 mb-4" style={{ height: "1px", background: "var(--border)" }} />
+        <div className="mx-4 mb-3" style={{ height: "1px", background: "var(--border)" }} />
 
-        {/* Nav grid */}
-        <nav className="flex-1 px-4 overflow-y-auto">
+        {/* Nav */}
+        <nav className="flex-1 px-3 overflow-y-auto space-y-0.5">
           <p
-            className="px-1 mb-3 text-[10px] font-bold uppercase tracking-widest"
+            className="px-3 mb-2 text-[10px] font-bold uppercase tracking-widest"
             style={{ color: "var(--text-3)" }}
           >
             Menú
           </p>
-          <div className="grid grid-cols-2 gap-1.5">
-            {navItems.map((item) => (
-              <GridNavItem
-                key={item.href}
-                {...item}
-                onClick={() => setMobileOpen(false)}
-              />
-            ))}
-          </div>
+          {navItems.map((item) => (
+            <NavItem
+              key={item.href}
+              {...item}
+              onClick={() => setMobileOpen(false)}
+            />
+          ))}
         </nav>
 
         {/* Footer */}
-        <div className="px-4 py-5" style={{ borderTop: "1px solid var(--border)" }}>
-          <div className="flex items-center justify-between">
+        <div className="px-3 py-4" style={{ borderTop: "1px solid var(--border)" }}>
+          <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2.5 min-w-0">
               <div
-                className="h-8 w-8 rounded-xl flex items-center justify-center text-xs font-bold shrink-0"
+                className="h-7 w-7 rounded-lg flex items-center justify-center text-[11px] font-bold shrink-0"
                 style={{ background: "var(--nav-active-bg)", color: "var(--nav-active-text)" }}
               >
                 A
               </div>
               <div className="min-w-0">
-                <p className="text-xs font-semibold truncate" style={{ color: "var(--text-1)" }}>
-                  Admin
-                </p>
-                <p className="text-[10px] truncate" style={{ color: "var(--text-3)" }}>
-                  Avancia Tech
-                </p>
+                <p className="text-xs font-semibold truncate" style={{ color: "var(--text-1)" }}>Admin</p>
+                <p className="text-[10px] truncate" style={{ color: "var(--text-3)" }}>Avancia Tech</p>
               </div>
             </div>
             <button
               onClick={toggle}
-              className="p-2 rounded-xl transition-all duration-150 shrink-0"
+              className="p-1.5 rounded-lg transition-all duration-150 shrink-0"
               style={{
                 background: "var(--bg-elevated)",
                 border: "1px solid var(--border)",
@@ -171,9 +176,7 @@ export function Sidebar() {
               }}
               title={theme === "dark" ? "Modo claro" : "Modo oscuro"}
             >
-              {theme === "dark"
-                ? <Sun className="h-3.5 w-3.5" />
-                : <Moon className="h-3.5 w-3.5" />}
+              {theme === "dark" ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
             </button>
           </div>
         </div>
