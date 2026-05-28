@@ -22,15 +22,15 @@
   --text-3:          #8896ab;
   --text-disabled:   #c4cdd8;
 
-  --accent:          #6366f1;
-  --accent-hover:    #4f52e0;
-  --accent-light:    rgba(99, 102, 241, 0.1);
-  --accent-muted:    rgba(99, 102, 241, 0.08);
+  --accent:          #0099ff;
+  --accent-hover:    #007de0;
+  --accent-light:    rgba(0, 153, 255, 0.1);
+  --accent-muted:    rgba(0, 153, 255, 0.08);
   --accent-foreground: #ffffff;
-  --accent-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-  --accent-gradient-hover: linear-gradient(135deg, #4f52e0 0%, #7c3aed 100%);
+  --accent-gradient: linear-gradient(135deg, #06b6d4 0%, #0066ff 100%);
+  --accent-gradient-hover: linear-gradient(135deg, #0ea5c8 0%, #0052d4 100%);
 
-  --nav-active-bg:   linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  --nav-active-bg:   linear-gradient(135deg, #06b6d4 0%, #0066ff 100%);
   --nav-active-text: #ffffff;
 
   --success:         #10b981;
@@ -52,8 +52,8 @@
   --violet:          #8b5cf6;
   --violet-muted:    rgba(139, 92, 246, 0.1);
 
-  --chart-1:         #6366f1;
-  --chart-2:         #8b5cf6;
+  --chart-1:         #0099ff;
+  --chart-2:         #06b6d4;
   --chart-3:         #10b981;
   --chart-4:         #f59e0b;
   --chart-5:         #ef4444;
